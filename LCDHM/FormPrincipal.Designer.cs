@@ -52,6 +52,7 @@
             // 
             // serial
             // 
+            this.serial.BaudRate = 115200;
             this.serial.PortName = "COM4";
             this.serial.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.Serial_Recebeu);
             // 
@@ -77,7 +78,7 @@
             this.menu_Sair});
             this.menu.Name = "menu";
             this.menu.ShowImageMargin = false;
-            this.menu.Size = new System.Drawing.Size(156, 164);
+            this.menu.Size = new System.Drawing.Size(126, 142);
             // 
             // menu_Conectar
             // 
@@ -86,7 +87,7 @@
             this.menu_Conectar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Conectar.Name = "menu_Conectar";
-            this.menu_Conectar.Size = new System.Drawing.Size(155, 22);
+            this.menu_Conectar.Size = new System.Drawing.Size(125, 22);
             this.menu_Conectar.Text = "Conectar";
             // 
             // menu_portas
@@ -97,13 +98,13 @@
             this.menu_portas.Name = "menu";
             this.menu_portas.OwnerItem = this.menu_Conectar;
             this.menu_portas.ShowImageMargin = false;
-            this.menu_portas.Size = new System.Drawing.Size(156, 26);
+            this.menu_portas.Size = new System.Drawing.Size(36, 4);
             // 
             // menu_Desconectar
             // 
             this.menu_Desconectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Desconectar.Name = "menu_Desconectar";
-            this.menu_Desconectar.Size = new System.Drawing.Size(155, 22);
+            this.menu_Desconectar.Size = new System.Drawing.Size(125, 22);
             this.menu_Desconectar.Text = "Desconectar";
             this.menu_Desconectar.Visible = false;
             this.menu_Desconectar.Click += new System.EventHandler(this.Menu_Desconectar_Click);
@@ -114,20 +115,20 @@
             this.menu_Atualizar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menu_Atualizar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Atualizar.Name = "menu_Atualizar";
-            this.menu_Atualizar.Size = new System.Drawing.Size(155, 22);
+            this.menu_Atualizar.Size = new System.Drawing.Size(125, 22);
             this.menu_Atualizar.Text = "Atualizar";
             this.menu_Atualizar.Click += new System.EventHandler(this.Menu_Atualizar_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(122, 6);
             // 
             // menu_Configurar
             // 
             this.menu_Configurar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Configurar.Name = "menu_Configurar";
-            this.menu_Configurar.Size = new System.Drawing.Size(155, 22);
+            this.menu_Configurar.Size = new System.Drawing.Size(125, 22);
             this.menu_Configurar.Text = "Configurar";
             this.menu_Configurar.Click += new System.EventHandler(this.Menu_Configurar_Click);
             // 
@@ -135,7 +136,7 @@
             // 
             this.menu_Sobre.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Sobre.Name = "menu_Sobre";
-            this.menu_Sobre.Size = new System.Drawing.Size(155, 22);
+            this.menu_Sobre.Size = new System.Drawing.Size(125, 22);
             this.menu_Sobre.Text = "Sobre";
             // 
             // menu_Sair
@@ -144,7 +145,7 @@
             this.menu_Sair.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menu_Sair.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Sair.Name = "menu_Sair";
-            this.menu_Sair.Size = new System.Drawing.Size(155, 22);
+            this.menu_Sair.Size = new System.Drawing.Size(125, 22);
             this.menu_Sair.Text = "Sair";
             this.menu_Sair.Click += new System.EventHandler(this.Menu_Sair_Click);
             // 

@@ -13,6 +13,7 @@ namespace LCDHM {
 
         private int
                 PAGINA = 0,
+                ANALISE_LINHA = 0,
                 FPS_MIN = 0,
                 FPS_MAX = 0,
                 CPU_CORES = 0,
@@ -50,6 +51,14 @@ namespace LCDHM {
                 if (entrada.Contains("p3")) MudarPagina(3);
                 if (entrada.Contains("p4")) MudarPagina(4);
                 if (entrada.Contains("p5")) MudarPagina(5);
+                if (entrada.Contains("p7")) {
+                    ANALISE_LINHA = 0;
+                    MudarPagina(7);
+                }
+                if (entrada.Contains("analise_gravar") && ANALISE_LINHA < 7) ANALISE_LINHA++;
+                if (entrada.Contains("analise_limpar")) ANALISE_LINHA=0;
+
+
                 if (entrada.Contains("fps_reset")) {
                     FPS_MAX = 0;
                     FPS_MIN = 0;
@@ -214,6 +223,17 @@ namespace LCDHM {
                     Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
                     Enviar("s3", 0, int.Parse(RAM_Porcentagem2.ToString("N0")), 0, 100, 0, 51);
                     break;
+                case 7:
+
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "0", GetEntidade("Framerate").Data.ToString("N0"));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "1", GetEntidade("GPU usage").Data.ToString("N0"));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "2", GetEntidade("Memory usage").Data.ToString("N0").Replace(".", ""));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "3", GetEntidade("GPU Temperature").Data.ToString("N0"));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "4", GetEntidade("CPU usage").Data.ToString("N0"));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "5", GetEntidade("CPU temperature").Data.ToString("N0"));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "6", GetEntidade("RAM usage").Data.ToString("N0").Replace(".", ""));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "7", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+                    break;
             }
         }
 
@@ -248,7 +268,7 @@ namespace LCDHM {
                     Process.Start(Properties.Settings.Default.MSI_Directory);
                 } catch (Exception) {
                     Mostrar_Configuracoes();
-                }                
+                }
             }
             Enviar("j0", 25);
             Enviar("t", "Abrindo Conexao");
@@ -290,60 +310,6 @@ namespace LCDHM {
             Enviar("j0", 70);
             Enviar("t", "Definindo Clocks");
             FAN_BOOST = int.Parse(CM.GpuEntries[0].FanSpeedCur.ToString("N0"));
-
-            Enviar("j0", 80);
-            Enviar("t", "Preenchendo Valores");
-            Enviar("GPU.t0", GetEntidade("GPU usage").Data.ToString());
-            Enviar("GPU.t1", GetEntidade("Core clock").Data.ToString());
-            Enviar("GPU.t2", GetEntidade("Memory clock").Data.ToString());
-            Enviar("GPU.t3", GetEntidade("Memory usage").Data.ToString("N0"));
-            Enviar("GPU.t4", GetEntidade("GPU temperature").Data.ToString());
-            Enviar("GPU.t5", "-");
-            Enviar("GPU.t6", "-");
-            Enviar("GPU.t7", "-");
-            Enviar("GPU.t8", GetEntidade("Fan tachometer").Data.ToString());
-            Enviar("GPU.t9", GetEntidade("Power").Data.ToString());
-            Enviar("j0", 84);
-            Enviar("Overclock.t10", GetEntidade("GPU temperature").Data.ToString());
-            Enviar("Overclock.t11", "0");
-            Enviar("j0", 87);
-            Enviar("CPU.t12", GetEntidade("CPU usage").Data.ToString());
-            Enviar("CPU.t13", GetEntidade("CPU fan speed").Data.ToString());
-            Enviar("CPU.t14", GetEntidade("CPU temperature").Data.ToString());
-            Enviar("CPU.t0", GetEntidade("CPU clock").Data.ToString("N0"));
-            Enviar("CPU.t15", CPU_CORES.ToString());
-            Enviar("CPU.t16", CPU_THREADS.ToString());
-            String cpus = "";
-            for (int i = 1; i < CPU_THREADS; i++) cpus += GetEntidade("CPU" + i.ToString() + " usage").Data.ToString("N0") + "%   ";
-            Enviar("CPU.t17", cpus);
-            float RAM_Uso = GetEntidade("RAM usage").Data;
-            float RAM_Porcentagem = (RAM_Uso / RAM_TOTAL) * 100;
-            Enviar("j0", 90);
-            Enviar("MEM.t18", RAM_Porcentagem.ToString("N0"));
-            Enviar("MEM.j1", int.Parse(RAM_Porcentagem.ToString("N0")));
-            Enviar("MEM.t19", RAM_Uso.ToString("N0"));
-            Enviar("MEM.t20", GetEntidade("HDD" + HDD_INDEX.ToString() + " read rate").Data.ToString("N0"));
-            Enviar("MEM.t21", GetEntidade("HDD" + HDD_INDEX.ToString() + " write rate").Data.ToString("N0"));
-            Enviar("MEM.t22", GetEntidade("HDD" + HDD_INDEX.ToString() + " temperature").Data.ToString("N0"));
-            Enviar("MEM.t0", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
-            Enviar("MEM.t23", HDD_INDEX.ToString());
-            Enviar("MEM.t25", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").Data.ToString("N0"));
-            Enviar("MEM.t26", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").SrcUnits.ToString());
-            Enviar("MEM.t27", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").Data.ToString("N0"));
-            Enviar("MEM.t28", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").SrcUnits.ToString());
-            Enviar("MEM.t29", NET_INDEX.ToString());
-            float RAM_Uso2 = GetEntidade("RAM usage").Data;
-            float RAM_Porcentagem2 = (RAM_Uso2 / RAM_TOTAL) * 100;
-            Enviar("j0", 95);
-            Enviar("GRAFICO.t30", GetEntidade("GPU usage").Data.ToString("N0") + " %");
-            Enviar("GRAFICO.t31", GetEntidade("CPU usage").Data.ToString("N0") + " %");
-            Enviar("GRAFICO.t32", RAM_Porcentagem2.ToString("N0") + " %");
-            Enviar("GRAFICO.t33", GetEntidade("Memory usage").Data.ToString("N0") + " MB");
-            Enviar("GRAFICO.t34", GetEntidade("GPU temperature").Data.ToString() + " C");
-            Enviar("GRAFICO.t35", GetEntidade("CPU clock").Data.ToString("N0") + " MHz");
-            Enviar("GRAFICO.t36", GetEntidade("CPU temperature").Data.ToString() + " C");
-            Enviar("GRAFICO.t37", RAM_Uso2.ToString("N0") + " MB");
-            Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
 
             Enviar("j0", 100);
             Enviar("t", "Conectado");
@@ -460,7 +426,7 @@ namespace LCDHM {
             Text_Steam_Diretorio.Text = Properties.Settings.Default.Steam_Directory;
             if (!(Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe"))) Mostrar_Configuracoes();
 
-            }
+        }
     }
 
 }
