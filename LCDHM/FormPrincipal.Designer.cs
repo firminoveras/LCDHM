@@ -25,7 +25,6 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrincipal));
-            this.serial = new LCDHM.Nextion(this.components);
             this.icone = new System.Windows.Forms.NotifyIcon(this.components);
             this.menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +44,7 @@
             this.BT_Buscar_Steam = new System.Windows.Forms.Button();
             this.Text_Steam_Diretorio = new System.Windows.Forms.TextBox();
             this.BT_Aplicar = new System.Windows.Forms.Button();
+            this.serial = new System.IO.Ports.SerialPort(this.components);
             this.menu.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -90,7 +90,6 @@
             this.menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menu_portas.Name = "menu";
-            this.menu_portas.OwnerItem = this.menu_Conectar;
             this.menu_portas.ShowImageMargin = false;
             this.menu_portas.Size = new System.Drawing.Size(36, 4);
             // 
@@ -241,6 +240,11 @@
             this.BT_Aplicar.UseVisualStyleBackColor = false;
             this.BT_Aplicar.Click += new System.EventHandler(this.BT_Aplicar_Click);
             // 
+            // serial
+            // 
+            this.serial.BaudRate = 115200;
+            this.serial.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.Serial_Recebeu);
+            // 
             // FormPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -267,7 +271,6 @@
         }
 
         #endregion
-        private LCDHM.Nextion serial;
         private System.Windows.Forms.NotifyIcon icone;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ContextMenuStrip menu;
@@ -287,6 +290,7 @@
         private System.Windows.Forms.TextBox Text_Steam_Diretorio;
         private System.Windows.Forms.Button BT_Aplicar;
         private System.Windows.Forms.ToolStripMenuItem menu_Configurar;
+        private System.IO.Ports.SerialPort serial;
     }
 }
 

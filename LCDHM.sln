@@ -11,18 +11,12 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Novo|x64 = Novo|x64
-		Novo|x86 = Novo|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.ActiveCfg = Release|x64
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.Build.0 = Release|x64
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.ActiveCfg = Debug|x64
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.Build.0 = Debug|x64
 		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x86.ActiveCfg = Debug|x86
 		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x86.Build.0 = Debug|x86
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x64.ActiveCfg = Novo|x64
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x64.Build.0 = Novo|x64
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x86.ActiveCfg = Novo|x86
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x86.Build.0 = Novo|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
