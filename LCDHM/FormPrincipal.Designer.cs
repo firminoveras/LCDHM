@@ -25,10 +25,10 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrincipal));
-            this.icone = new System.Windows.Forms.NotifyIcon(this.components);
-            this.menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.IconeNotificacao = new System.Windows.Forms.NotifyIcon(this.components);
+            this.MenuContexto = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_portas = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Menu_portas = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_Desconectar = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_Atualizar = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -45,24 +45,24 @@
             this.Text_Steam_Diretorio = new System.Windows.Forms.TextBox();
             this.BT_Aplicar = new System.Windows.Forms.Button();
             this.serial = new System.IO.Ports.SerialPort(this.components);
-            this.menu.SuspendLayout();
+            this.MenuContexto.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // icone
+            // IconeNotificacao
             // 
-            this.icone.ContextMenuStrip = this.menu;
-            this.icone.Icon = ((System.Drawing.Icon)(resources.GetObject("icone.Icon")));
-            this.icone.Text = "LCDhm";
-            this.icone.Visible = true;
+            this.IconeNotificacao.ContextMenuStrip = this.MenuContexto;
+            this.IconeNotificacao.Icon = ((System.Drawing.Icon)(resources.GetObject("IconeNotificacao.Icon")));
+            this.IconeNotificacao.Text = "LCDhm";
+            this.IconeNotificacao.Visible = true;
             // 
-            // menu
+            // MenuContexto
             // 
-            this.menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.menu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.menu.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuContexto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.MenuContexto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MenuContexto.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MenuContexto.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_Conectar,
             this.menu_Desconectar,
             this.menu_Atualizar,
@@ -70,28 +70,28 @@
             this.menu_Configurar,
             this.menu_Sobre,
             this.menu_Sair});
-            this.menu.Name = "menu";
-            this.menu.ShowImageMargin = false;
-            this.menu.Size = new System.Drawing.Size(126, 142);
+            this.MenuContexto.Name = "menu";
+            this.MenuContexto.ShowImageMargin = false;
+            this.MenuContexto.Size = new System.Drawing.Size(126, 142);
             // 
             // menu_Conectar
             // 
             this.menu_Conectar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.menu_Conectar.DropDown = this.menu_portas;
+            this.menu_Conectar.DropDown = this.Menu_portas;
             this.menu_Conectar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Conectar.Name = "menu_Conectar";
             this.menu_Conectar.Size = new System.Drawing.Size(125, 22);
             this.menu_Conectar.Text = "Conectar";
             // 
-            // menu_portas
+            // Menu_portas
             // 
-            this.menu_portas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_portas.Name = "menu";
-            this.menu_portas.ShowImageMargin = false;
-            this.menu_portas.Size = new System.Drawing.Size(36, 4);
+            this.Menu_portas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.Menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Menu_portas.Name = "menu";
+            this.Menu_portas.ShowImageMargin = false;
+            this.Menu_portas.Size = new System.Drawing.Size(36, 4);
             // 
             // menu_Desconectar
             // 
@@ -261,7 +261,7 @@
             this.ShowInTaskbar = false;
             this.Text = "LCDHM";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.menu.ResumeLayout(false);
+            this.MenuContexto.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -271,14 +271,14 @@
         }
 
         #endregion
-        private System.Windows.Forms.NotifyIcon icone;
+        private System.Windows.Forms.NotifyIcon IconeNotificacao;
         private System.Windows.Forms.Timer timer;
-        private System.Windows.Forms.ContextMenuStrip menu;
+        private System.Windows.Forms.ContextMenuStrip MenuContexto;
         private System.Windows.Forms.ToolStripMenuItem menu_Atualizar;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menu_Sair;
         private System.Windows.Forms.ToolStripMenuItem menu_Conectar;
-        private System.Windows.Forms.ContextMenuStrip menu_portas;
+        private System.Windows.Forms.ContextMenuStrip Menu_portas;
         private System.Windows.Forms.ToolStripMenuItem menu_Desconectar;
         private System.Windows.Forms.ToolStripMenuItem menu_Sobre;
         private System.Windows.Forms.TextBox Text_MSI_Diretorio;

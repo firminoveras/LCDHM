@@ -39,6 +39,14 @@ namespace LCDHM {
             InitializeComponent();
             AtualizarPortas();
         }
+        private void Form1_Load(object sender, EventArgs e) {
+            Ocultar_Configuracoes();
+            Properties.Settings.Default.Reload();
+            Text_MSI_Diretorio.Text = Properties.Settings.Default.MSI_Directory;
+            Text_Steam_Diretorio.Text = Properties.Settings.Default.Steam_Directory;
+            if (!(Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe"))) Mostrar_Configuracoes();
+
+        }
 
         private void Serial_Recebeu(object sender, SerialDataReceivedEventArgs e) {
             if (Conectado) {
@@ -127,6 +135,7 @@ namespace LCDHM {
             }
         }
 
+        private void TimerTick(object sender, EventArgs e) => Enviar_Automatico();
         private void Enviar_Automatico() {
             int fps;
             switch (PAGINA) {
@@ -238,7 +247,6 @@ namespace LCDHM {
                     Enviar("ANALISE.t" + ANALISE_LINHA + "7", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
                     break;
 
-
                 //SrcName = CPU voltage; SrcUnits = V; LocalizedSourceName = Tensão da CPU; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 2; Flags = None; GPU = 4294967295; SrcId = 241
                 //SrcName = PSU + 3.3V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +3.3V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 5; Flags = None; GPU = 0; SrcId = 246
                 //SrcName = PSU + 5V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +5V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 10; Flags = None; GPU = 0; SrcId = 246
@@ -257,7 +265,7 @@ namespace LCDHM {
             }
         }
 
-        private void ConectarCORE(object sender, EventArgs e) {            
+        private void ConectarCORE(object sender, EventArgs e) {
             serial.PortName = ((ToolStripItem)sender).Text;
             serial.Open();
             serial.DiscardInBuffer();
@@ -266,7 +274,7 @@ namespace LCDHM {
             serial.WriteLine("INIT");
             Thread.Sleep(1000);
             if (serial.BytesToRead > 0 && serial.ReadLine().Contains("Conectar")) {
-                icone.ShowBalloonTip(1000, "LCDHM", "Conectado a porta " + ((ToolStripItem)sender).Text + "...", ToolTipIcon.Warning);
+                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado a porta " + ((ToolStripItem)sender).Text + "...", ToolTipIcon.Warning);
                 Conectado = true;
                 menu_Conectar.Visible = false;
                 menu_Atualizar.Visible = false;
@@ -274,8 +282,22 @@ namespace LCDHM {
                 serial.WriteLine("page 0");
                 timer.Start();
             } else {
-                icone.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar.", ToolTipIcon.Error);
+                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar.", ToolTipIcon.Error);
                 serial.Close();
+            }
+        }
+        private void DesconectarCORE() {
+            if (Conectado) {
+                Enviar("page 0");
+                timer.Stop();
+                Conectado = false;
+                menu_Conectar.Visible = true;
+                menu_Atualizar.Visible = true;
+                menu_Desconectar.Visible = false;
+                HM.Disconnect();
+                CM.Disconnect();
+                serial.Close();
+                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
             }
         }
 
@@ -337,21 +359,6 @@ namespace LCDHM {
             Enviar("page Principal");
         }
 
-        private void DesconectarCORE() {
-            if (Conectado) {
-                Enviar("page 0");
-                timer.Stop();
-                Conectado = false;
-                menu_Conectar.Visible = true;
-                menu_Atualizar.Visible = true;
-                menu_Desconectar.Visible = false;
-                HM.Disconnect();
-                CM.Disconnect();                
-                serial.Close();
-                icone.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
-            }
-        }
-
         private HardwareMonitorEntry GetEntidade(String nome) {
             foreach (HardwareMonitorEntry e in HM.Entries) {
                 if (e.SrcName.Equals(nome)) {
@@ -365,7 +372,6 @@ namespace LCDHM {
         private void BT_Buscar_Steam_Click(object sender, EventArgs e) {
             if (FileDialog.ShowDialog().ToString() == "OK") Text_Steam_Diretorio.Text = FileDialog.FileName;
         }
-
         private void BT_Aplicar_Click(object sender, EventArgs e) {
             if (Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe")) {
                 Properties.Settings.Default.MSI_Directory = Text_MSI_Diretorio.Text;
@@ -373,10 +379,9 @@ namespace LCDHM {
                 Properties.Settings.Default.Save();
                 Ocultar_Configuracoes();
             } else {
-                icone.ShowBalloonTip(1000, "Endereço Inválido", "Caminho do programa da Steam ou do Afterburner inválido.", ToolTipIcon.Error);
+                IconeNotificacao.ShowBalloonTip(1000, "Endereço Inválido", "Caminho do programa da Steam ou do Afterburner inválido.", ToolTipIcon.Error);
             }
         }
-
         private void BT_Buscar_MSI_Click(object sender, EventArgs e) {
             if (FileDialog.ShowDialog().ToString() == "OK") Text_MSI_Diretorio.Text = FileDialog.FileName;
         }
@@ -395,21 +400,22 @@ namespace LCDHM {
             Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
             if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) Enviar("Overclock.tfan", "AUTO"); else Enviar("Overclock.tfan", FAN_BOOST.ToString());
         }
-
         private void AtualizarPortas() {
-            menu_portas.Items.Clear();
-            foreach (String port in SerialPort.GetPortNames()) menu_portas.Items.Add(port, null, ConectarCORE);
+            Menu_portas.Items.Clear();
+            foreach (String port in SerialPort.GetPortNames()) Menu_portas.Items.Add(port, null, ConectarCORE);
         }
 
         private void Menu_Atualizar_Click(object sender, EventArgs e) {
             AtualizarPortas();
-            icone.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
+            IconeNotificacao.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
         }
-
         private void Menu_Desconectar_Click(object sender, EventArgs e) => DesconectarCORE();
-
         private void Menu_Configurar_Click(object sender, EventArgs e) {
             Mostrar_Configuracoes();
+        }
+        private void Menu_Sair_Click(object sender, EventArgs e) {
+            DesconectarCORE();
+            Application.Exit();
         }
 
         private void Mostrar_Configuracoes() {
@@ -417,55 +423,16 @@ namespace LCDHM {
             this.Opacity = 100;
             this.ShowInTaskbar = true;
         }
-
         private void Ocultar_Configuracoes() {
             this.Location = new Point(-10000, -10000);
             this.Opacity = 0;
             this.ShowInTaskbar = false;
         }
 
-        private void Menu_Sair_Click(object sender, EventArgs e) {
-            DesconectarCORE();
-            Application.Exit();
-        }
-
-        private void TimerTick(object sender, EventArgs e) => Enviar_Automatico();
-
-        private void Form1_Load(object sender, EventArgs e) {
-            Ocultar_Configuracoes();
-            Properties.Settings.Default.Reload();
-            Text_MSI_Diretorio.Text = Properties.Settings.Default.MSI_Directory;
-            Text_Steam_Diretorio.Text = Properties.Settings.Default.Steam_Directory;
-            if (!(Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe"))) Mostrar_Configuracoes();
-
-        }
-
-
-
-
-
-
-
-
         public void Enviar(String Comando) => serial.WriteLine(Comando);
-
         public void Enviar(String Variavel, String Texto) => serial.WriteLine(Variavel + ".txt=\"" + Texto + "\"");
-
         public void Enviar(String Variavel, int Valor) => serial.WriteLine(Variavel + ".val=" + Valor);
-
-        public void Enviar(String Variavel, int Chanel, int Valor, int In_min, int In_max, int Out_min, int Out_max) {
-            int div = (In_max - In_min) + Out_min;
-            if (div != 0) {
-                serial.WriteLine("add " + Variavel + ".id" + "," + Chanel.ToString() + "," + ((Valor - In_min) * (Out_max - Out_min) / div).ToString("N0"));
-            } else {
-                serial.WriteLine("add " + Variavel + ".id" + ",0");
-            }
-        }
-
-
-
-
-
+        public void Enviar(String Variavel, int Chanel, int Valor, int In_min, int In_max, int Out_min, int Out_max) => serial.WriteLine("add " + Variavel + ".id" + "," + Chanel.ToString() + "," + ((Valor - In_min) * (Out_max - Out_min) / (In_max - In_min) + Out_min).ToString("N0"));
+        public void Enviar(String Variavel, Color c) => serial.WriteLine(Variavel + ".pco=" + ((c.R >> 3) << 11) + ((c.G >> 2) << 5) + (c.B >> 3));
     }
-
 }
