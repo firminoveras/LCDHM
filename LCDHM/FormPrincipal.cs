@@ -14,6 +14,7 @@ namespace LCDHM {
         private int
                 PAGINA = 0,
                 ANALISE_LINHA = 0,
+                ANALISE_MIN_FPS = 60,
                 FPS_MIN = 0,
                 FPS_MAX = 0,
                 CPU_CORES = 0,
@@ -51,19 +52,20 @@ namespace LCDHM {
                 if (entrada.Contains("p3")) MudarPagina(3);
                 if (entrada.Contains("p4")) MudarPagina(4);
                 if (entrada.Contains("p5")) MudarPagina(5);
+                if (entrada.Contains("p6")) MudarPagina(6);
                 if (entrada.Contains("p7")) {
                     ANALISE_LINHA = 0;
                     MudarPagina(7);
                 }
                 if (entrada.Contains("analise_gravar") && ANALISE_LINHA < 7) ANALISE_LINHA++;
-                if (entrada.Contains("analise_limpar")) ANALISE_LINHA=0;
-
+                if (entrada.Contains("analise_limpar")) ANALISE_LINHA = 0;
+                if (entrada.Contains("analise_auto")) ANALISE_MIN_FPS = Convert.ToInt32(entrada.Replace("analise_auto", ""));
 
                 if (entrada.Contains("fps_reset")) {
                     FPS_MAX = 0;
                     FPS_MIN = 0;
-                    Enviar("GPU.t6", "-");
-                    Enviar("GPU.t7", "-");
+                    serial.Enviar("GPU.t6", "-");
+                    serial.Enviar("GPU.t7", "-");
                 }
                 if (entrada.Contains("core_min") && CORE_BOOST > -200) { CORE_BOOST -= 25; AtualizarClocks(); }
                 if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += 25; AtualizarClocks(); Console.WriteLine(CM.GpuEntries[0].CoreClockBoostCur); }
@@ -133,41 +135,41 @@ namespace LCDHM {
                 case 1:
                     fps = int.Parse(GetEntidade("Framerate").Data.ToString("N0"));
                     if (fps == 0) {
-                        Enviar("GPU.t5", "-");
-                        Enviar("GPU.t6", "-");
-                        Enviar("GPU.t7", "-");
+                        serial.Enviar("GPU.t5", "-");
+                        serial.Enviar("GPU.t6", "-");
+                        serial.Enviar("GPU.t7", "-");
                         FPS_MAX = 0;
                         FPS_MIN = 0;
                     } else {
                         if (FPS_MIN == 0) FPS_MIN = fps; else if (fps < FPS_MIN) FPS_MIN = fps;
                         if (FPS_MAX == 0) FPS_MAX = fps; else if (fps > FPS_MAX) FPS_MAX = fps;
-                        Enviar("GPU.t5", fps.ToString());
-                        Enviar("GPU.t6", FPS_MIN.ToString());
-                        Enviar("GPU.t7", FPS_MAX.ToString());
+                        serial.Enviar("GPU.t5", fps.ToString());
+                        serial.Enviar("GPU.t6", FPS_MIN.ToString());
+                        serial.Enviar("GPU.t7", FPS_MAX.ToString());
                     }
-                    Enviar("GPU.t0", GetEntidade("GPU usage").Data.ToString());
-                    Enviar("GPU.t1", GetEntidade("Core clock").Data.ToString());
-                    Enviar("GPU.t2", GetEntidade("Memory clock").Data.ToString());
-                    Enviar("GPU.t3", GetEntidade("Memory usage").Data.ToString("N0"));
-                    Enviar("GPU.t4", GetEntidade("GPU temperature").Data.ToString());
-                    Enviar("GPU.t8", GetEntidade("Fan tachometer").Data.ToString());
-                    Enviar("GPU.t9", GetEntidade("Power").Data.ToString());
+                    serial.Enviar("GPU.t0", GetEntidade("GPU usage").Data.ToString());
+                    serial.Enviar("GPU.t1", GetEntidade("Core clock").Data.ToString());
+                    serial.Enviar("GPU.t2", GetEntidade("Memory clock").Data.ToString());
+                    serial.Enviar("GPU.t3", GetEntidade("Memory usage").Data.ToString("N0"));
+                    serial.Enviar("GPU.t4", GetEntidade("GPU temperature").Data.ToString());
+                    serial.Enviar("GPU.t8", GetEntidade("Fan tachometer").Data.ToString());
+                    serial.Enviar("GPU.t9", GetEntidade("Power").Data.ToString());
                     break;
                 case 2:
                     fps = int.Parse(GetEntidade("Framerate").Data.ToString("N0"));
-                    Enviar("gGPU", 0, fps, 0, 100, 0, 100);
-                    Enviar("gGPU", 1, int.Parse(GetEntidade("GPU temperature").Data.ToString("N0")), 0, 100, 0, 100);
-                    Enviar("Overclock.t11", GetEntidade("GPU temperature").Data.ToString() + " C");
-                    Enviar("Overclock.t10", fps.ToString() + " fps");
-                    Enviar("line 11,160,311,160,1024");
+                    serial.Enviar("gGPU", 0, fps, 0, 100, 0, 100);
+                    serial.Enviar("gGPU", 1, int.Parse(GetEntidade("GPU temperature").Data.ToString("N0")), 0, 100, 0, 100);
+                    serial.Enviar("Overclock.t11", GetEntidade("GPU temperature").Data.ToString() + " C");
+                    serial.Enviar("Overclock.t10", fps.ToString() + " fps");
+                    serial.Enviar("line 11,160,311,160,1024");
                     break;
                 case 3:
-                    Enviar("CPU.t12", GetEntidade("CPU usage").Data.ToString("N0"));
-                    Enviar("CPU.t13", GetEntidade("CPU fan speed").Data.ToString());
-                    Enviar("CPU.t14", GetEntidade("CPU temperature").Data.ToString());
-                    Enviar("CPU.t0", GetEntidade("CPU clock").Data.ToString("N0"));
-                    Enviar("CPU.t15", CPU_CORES.ToString());
-                    Enviar("CPU.t16", CPU_THREADS.ToString());
+                    serial.Enviar("CPU.t12", GetEntidade("CPU usage").Data.ToString("N0"));
+                    serial.Enviar("CPU.t13", GetEntidade("CPU fan speed").Data.ToString());
+                    serial.Enviar("CPU.t14", GetEntidade("CPU temperature").Data.ToString());
+                    serial.Enviar("CPU.t0", GetEntidade("CPU clock").Data.ToString("N0"));
+                    serial.Enviar("CPU.t15", CPU_CORES.ToString());
+                    serial.Enviar("CPU.t16", CPU_THREADS.ToString());
                     String cpus = "";
                     //MONOSPAÇAR
                     for (int i = 1; i < CPU_THREADS; i++) {
@@ -181,64 +183,81 @@ namespace LCDHM {
                     }
 
 
-                    Enviar("CPU.t17", cpus);
-                    Enviar("gCPU", 0, int.Parse(GetEntidade("CPU usage").Data.ToString("N0")), 0, 100, 0, 81);
-                    Enviar("gCPU", 1, int.Parse(GetEntidade("CPU temperature").Data.ToString("N0")), 0, 100, 0, 81);
+                    serial.Enviar("CPU.t17", cpus);
+                    serial.Enviar("gCPU", 0, int.Parse(GetEntidade("CPU usage").Data.ToString("N0")), 0, 100, 0, 81);
+                    serial.Enviar("gCPU", 1, int.Parse(GetEntidade("CPU temperature").Data.ToString("N0")), 0, 100, 0, 81);
                     break;
                 case 4:
                     float RAM_Uso = GetEntidade("RAM usage").Data;
                     float RAM_Porcentagem = (RAM_Uso / RAM_TOTAL) * 100;
-                    Enviar("MEM.t18", RAM_Porcentagem.ToString("N0"));
-                    Enviar("MEM.j1", int.Parse(RAM_Porcentagem.ToString("N0")));
-                    Enviar("MEM.t19", RAM_Uso.ToString("N0"));
-                    Enviar("MEM.t20", GetEntidade("HDD" + HDD_INDEX.ToString() + " read rate").Data.ToString("N0"));
-                    Enviar("MEM.t21", GetEntidade("HDD" + HDD_INDEX.ToString() + " write rate").Data.ToString("N0"));
-                    Enviar("MEM.t22", GetEntidade("HDD" + HDD_INDEX.ToString() + " temperature").Data.ToString("N0"));
-                    Enviar("MEM.t0", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
-                    Enviar("MEM.t23", HDD_INDEX.ToString());
-                    Enviar("MEM.t25", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").Data.ToString("N0"));
-                    Enviar("MEM.t26", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").SrcUnits.ToString());
-                    Enviar("MEM.t27", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").Data.ToString("N0"));
-                    Enviar("MEM.t28", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").SrcUnits.ToString());
-                    Enviar("MEM.t29", NET_INDEX.ToString());
-                    Enviar("gMEM", 0, int.Parse(RAM_Porcentagem.ToString("N0")), 0, 100, 0, 81);
+                    serial.Enviar("MEM.t18", RAM_Porcentagem.ToString("N0"));
+                    serial.Enviar("MEM.j1", int.Parse(RAM_Porcentagem.ToString("N0")));
+                    serial.Enviar("MEM.t19", RAM_Uso.ToString("N0"));
+                    serial.Enviar("MEM.t20", GetEntidade("HDD" + HDD_INDEX.ToString() + " read rate").Data.ToString("N0"));
+                    serial.Enviar("MEM.t21", GetEntidade("HDD" + HDD_INDEX.ToString() + " write rate").Data.ToString("N0"));
+                    serial.Enviar("MEM.t22", GetEntidade("HDD" + HDD_INDEX.ToString() + " temperature").Data.ToString("N0"));
+                    serial.Enviar("MEM.t0", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+                    serial.Enviar("MEM.t23", HDD_INDEX.ToString());
+                    serial.Enviar("MEM.t25", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").Data.ToString("N0"));
+                    serial.Enviar("MEM.t26", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").SrcUnits.ToString());
+                    serial.Enviar("MEM.t27", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").Data.ToString("N0"));
+                    serial.Enviar("MEM.t28", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").SrcUnits.ToString());
+                    serial.Enviar("MEM.t29", NET_INDEX.ToString());
+                    serial.Enviar("gMEM", 0, int.Parse(RAM_Porcentagem.ToString("N0")), 0, 100, 0, 81);
                     break;
                 case 5:
                     float RAM_Uso2 = GetEntidade("RAM usage").Data;
                     float RAM_Porcentagem2 = (RAM_Uso2 / RAM_TOTAL) * 100;
-                    Enviar("GRAFICO.t30", GetEntidade("GPU usage").Data.ToString("N0") + " %");
-                    Enviar("GRAFICO.t31", GetEntidade("CPU usage").Data.ToString("N0") + " %");
-                    Enviar("GRAFICO.t32", GetEntidade("framerate").Data.ToString("N0") + " fps");
-                    Enviar("s0", 0, int.Parse(GetEntidade("GPU usage").Data.ToString("N0")), 0, 100, 0, 71);
-                    Enviar("s0", 1, int.Parse(GetEntidade("CPU usage").Data.ToString("N0")), 0, 100, 0, 71);
-                    Enviar("s0", 2, int.Parse(GetEntidade("framerate").Data.ToString("N0")), 0, 71, 0, 71);
-                    Enviar("GRAFICO.t33", GetEntidade("Memory usage").Data.ToString("N0") + " MB");
-                    Enviar("GRAFICO.t34", GetEntidade("GPU temperature").Data.ToString() + " C");
-                    Enviar("s1", 0, int.Parse(((GetEntidade("Memory usage").Data / (GetEntidade("Total Committed").Data)) * 100).ToString("N0")), 0, 100, 0, 51);
-                    Enviar("GRAFICO.t35", GetEntidade("CPU clock").Data.ToString("N0") + " MHz");
-                    Enviar("GRAFICO.t36", GetEntidade("CPU temperature").Data.ToString() + " C");
+                    serial.Enviar("GRAFICO.t30", GetEntidade("GPU usage").Data.ToString("N0") + " %");
+                    serial.Enviar("GRAFICO.t31", GetEntidade("CPU usage").Data.ToString("N0") + " %");
+                    serial.Enviar("GRAFICO.t32", GetEntidade("framerate").Data.ToString("N0") + " fps");
+                    serial.Enviar("s0", 0, int.Parse(GetEntidade("GPU usage").Data.ToString("N0")), 0, 100, 0, 71);
+                    serial.Enviar("s0", 1, int.Parse(GetEntidade("CPU usage").Data.ToString("N0")), 0, 100, 0, 71);
+                    serial.Enviar("s0", 2, int.Parse(GetEntidade("framerate").Data.ToString("N0")), 0, 71, 0, 71);
+                    serial.Enviar("GRAFICO.t33", GetEntidade("Memory usage").Data.ToString("N0") + " MB");
+                    serial.Enviar("GRAFICO.t34", GetEntidade("GPU temperature").Data.ToString() + " C");
+                    serial.Enviar("s1", 0, int.Parse(GetEntidade("Memory usage").Data.ToString("N0")), 0, Convert.ToInt32(GetEntidade("Total Committed").Data), 0, 51);
+                    serial.Enviar("GRAFICO.t35", GetEntidade("CPU clock").Data.ToString("N0") + " MHz");
+                    serial.Enviar("GRAFICO.t36", GetEntidade("CPU temperature").Data.ToString() + " C");
                     //FAZER SOZINHO
-                    Enviar("s2", 0, int.Parse(((GetEntidade("CPU clock").Data / 3900) * 100).ToString("N0")), 0, 100, 0, 51);
-                    Enviar("GRAFICO.t37", RAM_Uso2.ToString("N0") + " MB");
-                    Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
-                    Enviar("s3", 0, int.Parse(RAM_Porcentagem2.ToString("N0")), 0, 100, 0, 51);
+                    serial.Enviar("s2", 0, int.Parse(((GetEntidade("CPU clock").Data / 3900) * 100).ToString("N0")), 0, 100, 0, 51);
+                    serial.Enviar("GRAFICO.t37", RAM_Uso2.ToString("N0") + " MB");
+                    serial.Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
+                    serial.Enviar("s3", 0, int.Parse(RAM_Porcentagem2.ToString("N0")), 0, 100, 0, 51);
                     break;
                 case 7:
+                    fps = Convert.ToInt32(GetEntidade("Framerate").Data);
+                    if (fps <= ANALISE_MIN_FPS && ANALISE_LINHA < 7 && fps != 0) ANALISE_LINHA++;
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "0", fps.ToString("N0"));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "1", GetEntidade("GPU usage").Data.ToString("N0"));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "2", GetEntidade("Memory usage").Data.ToString("N0").Replace(".", ""));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "3", GetEntidade("GPU Temperature").Data.ToString("N0"));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "4", GetEntidade("CPU usage").Data.ToString("N0"));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "5", GetEntidade("CPU temperature").Data.ToString("N0"));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "6", GetEntidade("RAM usage").Data.ToString("N0").Replace(".", ""));
+                    serial.Enviar("ANALISE.t" + ANALISE_LINHA + "7", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+                    break;
 
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "0", GetEntidade("Framerate").Data.ToString("N0"));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "1", GetEntidade("GPU usage").Data.ToString("N0"));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "2", GetEntidade("Memory usage").Data.ToString("N0").Replace(".", ""));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "3", GetEntidade("GPU Temperature").Data.ToString("N0"));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "4", GetEntidade("CPU usage").Data.ToString("N0"));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "5", GetEntidade("CPU temperature").Data.ToString("N0"));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "6", GetEntidade("RAM usage").Data.ToString("N0").Replace(".", ""));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "7", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+
+                //SrcName = CPU voltage; SrcUnits = V; LocalizedSourceName = Tensão da CPU; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 2; Flags = None; GPU = 4294967295; SrcId = 241
+                //SrcName = PSU + 3.3V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +3.3V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 5; Flags = None; GPU = 0; SrcId = 246
+                //SrcName = PSU + 5V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +5V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 10; Flags = None; GPU = 0; SrcId = 246
+                //SrcName = PSU + 12V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +12V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 15; Flags = None; GPU = 0; SrcId = 246
+                case 6:
+                    serial.Enviar("PSU.t0", GetEntidade("Power").Data.ToString());
+                    serial.Enviar("PSU.t1", GetEntidade("CPU voltage").Data.ToString());
+
+                    serial.Enviar("PSU.t2", GetEntidade("PSU + 3.3V voltage").Data.ToString());
+                    serial.Enviar("PSU.t4", GetEntidade("PSU + 5V voltage").Data.ToString());
+                    serial.Enviar("PSU.t6", GetEntidade("PSU + 12V voltage").Data.ToString());
+
+
+
                     break;
             }
         }
 
-        private void ConectarCORE(object sender, EventArgs e) {
-            icone.ShowBalloonTip(1000, "LCDHM", "Conectando a porta " + ((ToolStripItem)sender).Text + "...", ToolTipIcon.Warning);
+        private void ConectarCORE(object sender, EventArgs e) {            
             serial.PortName = ((ToolStripItem)sender).Text;
             serial.Open();
             serial.DiscardInBuffer();
@@ -247,7 +266,7 @@ namespace LCDHM {
             serial.WriteLine("INIT");
             Thread.Sleep(1000);
             if (serial.BytesToRead > 0 && serial.ReadLine().Contains("Conectar")) {
-                icone.ShowBalloonTip(1000, "LCDHM", "Conectado.", ToolTipIcon.Info);
+                icone.ShowBalloonTip(1000, "LCDHM", "Conectado a porta " + ((ToolStripItem)sender).Text + "...", ToolTipIcon.Warning);
                 Conectado = true;
                 menu_Conectar.Visible = false;
                 menu_Atualizar.Visible = false;
@@ -261,8 +280,8 @@ namespace LCDHM {
         }
 
         private void ConectarMSI() {
-            Enviar("j0", 10);
-            Enviar("t", "Inicializando MSI");
+            serial.Enviar("j0", 10);
+            serial.Enviar("t", "Inicializando MSI");
             while (Process.GetProcessesByName("MSIAfterburner").Length == 0) {
                 try {
                     Process.Start(Properties.Settings.Default.MSI_Directory);
@@ -270,77 +289,67 @@ namespace LCDHM {
                     Mostrar_Configuracoes();
                 }
             }
-            Enviar("j0", 25);
-            Enviar("t", "Abrindo Conexao");
+            serial.Enviar("j0", 25);
+            serial.Enviar("t", "Criando Conectividade");
             while (true) {
                 try {
                     HM = new HardwareMonitor();
                     CM = new ControlMemory();
                     break;
                 } catch (Exception) {
-                    Enviar("j0", 30);
+                    serial.Enviar("j0", 30);
                     Thread.Sleep(500);
                 }
             }
 
-            Enviar("j0", 35);
-            Enviar("t", "Conectando ao MSI");
+            serial.Enviar("j0", 35);
+            serial.Enviar("t", "Conectando ao MSI");
             while (true) {
                 try {
                     HM.Connect();
                     CM.Connect();
                     break;
                 } catch (Exception) {
-                    Enviar("j0", 40);
+                    serial.Enviar("j0", 40);
                     Thread.Sleep(500);
                 }
             }
 
 
-            Enviar("j0", 50);
-            Enviar("t", "Definindo Constantes");
+            serial.Enviar("j0", 50);
+            serial.Enviar("t", "Definindo Constantes");
+
             CPU_THREADS = Environment.ProcessorCount;
             CPU_CORES = 0;
             System.Management.ManagementObjectSearcher managementObjectSearcher = new System.Management.ManagementObjectSearcher("Select * from Win32_Processor");
             foreach (System.Management.ManagementBaseObject item in managementObjectSearcher.Get()) this.CPU_CORES += int.Parse(item["NumberOfCores"].ToString());
             managementObjectSearcher.Dispose();
-            Enviar("j0", 60);
+            serial.Enviar("j0", 60);
             RAM_TOTAL = (int)(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
 
-            Enviar("j0", 70);
-            Enviar("t", "Definindo Clocks");
+            serial.Enviar("j0", 70);
+            serial.Enviar("t", "Definindo Clocks");
             FAN_BOOST = int.Parse(CM.GpuEntries[0].FanSpeedCur.ToString("N0"));
 
-            Enviar("j0", 100);
-            Enviar("t", "Conectado");
-            Thread.Sleep(1000);
-            Enviar("page Principal");
+            serial.Enviar("j0", 100);
+            serial.Enviar("t", "Conectado");
+            Thread.Sleep(600);
+            serial.Enviar("page Principal");
         }
 
         private void DesconectarCORE() {
             if (Conectado) {
-                Enviar("page 0");
-                icone.ShowBalloonTip(1000, "LCDHM", "Desconectando", ToolTipIcon.Info);
+                serial.Enviar("page 0");
                 timer.Stop();
                 Conectado = false;
                 menu_Conectar.Visible = true;
                 menu_Atualizar.Visible = true;
                 menu_Desconectar.Visible = false;
-                serial.DiscardInBuffer();
-                serial.DiscardOutBuffer();
+                HM.Disconnect();
+                CM.Disconnect();                
                 serial.Close();
                 icone.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
             }
-        }
-
-        private void Enviar(String Comando) => serial.WriteLine(Comando);
-
-        private void Enviar(String Variavel, String Texto) => serial.WriteLine(Variavel + ".txt=\"" + Texto + "\"");
-
-        private void Enviar(String Variavel, int Valor) => serial.WriteLine(Variavel + ".val=" + Valor);
-
-        private void Enviar(String Variavel, int Chanel, int Valor, int In_min, int In_max, int Out_min, int Out_max) {
-            serial.WriteLine("add " + Variavel + ".id" + "," + Chanel.ToString() + "," + ((Valor - In_min) * (Out_max - Out_min) / (In_max - In_min) + Out_min).ToString("N0"));
         }
 
         private HardwareMonitorEntry GetEntidade(String nome) {
@@ -382,9 +391,9 @@ namespace LCDHM {
             String sinalCore = "", sinalMem = ""; ;
             if (CORE_BOOST >= 0) sinalCore = "+";
             if (MEM_BOOST >= 0) sinalMem = "+";
-            Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalCore + CORE_BOOST);
-            Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
-            if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) Enviar("Overclock.tfan", "AUTO"); else Enviar("Overclock.tfan", FAN_BOOST.ToString());
+            serial.Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalCore + CORE_BOOST);
+            serial.Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
+            if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) serial.Enviar("Overclock.tfan", "AUTO"); else serial.Enviar("Overclock.tfan", FAN_BOOST.ToString());
         }
 
         private void AtualizarPortas() {

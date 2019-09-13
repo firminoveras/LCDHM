@@ -7,28 +7,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCDHM", "LCDHM\LCDHM.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBA092D1-2242-49ED-B63C-B6E40DEA7E8D}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Instalador do LCDHM", "Instalador dp LCDHM\Instalador dp LCDHM.vdproj", "{3F14E525-0797-4B3D-95A7-51E34DB85A2B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
-		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
+		Debug|x86 = Debug|x86
+		Novo|x64 = Novo|x64
+		Novo|x86 = Novo|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|Any CPU.Build.0 = Release|Any CPU
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.ActiveCfg = Debug|x64
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.Build.0 = Debug|x64
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Release|x64.ActiveCfg = Release|x64
-		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Release|x64.Build.0 = Release|x64
-		{3F14E525-0797-4B3D-95A7-51E34DB85A2B}.Debug|Any CPU.ActiveCfg = Debug
-		{3F14E525-0797-4B3D-95A7-51E34DB85A2B}.Debug|x64.ActiveCfg = Debug
-		{3F14E525-0797-4B3D-95A7-51E34DB85A2B}.Release|Any CPU.ActiveCfg = Release
-		{3F14E525-0797-4B3D-95A7-51E34DB85A2B}.Release|x64.ActiveCfg = Release
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.ActiveCfg = Release|x64
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x64.Build.0 = Release|x64
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x86.ActiveCfg = Debug|x86
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Debug|x86.Build.0 = Debug|x86
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x64.ActiveCfg = Novo|x64
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x64.Build.0 = Novo|x64
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x86.ActiveCfg = Novo|x86
+		{FE81C1BF-071F-43DA-B50E-F3B10865B37A}.Novo|x86.Build.0 = Novo|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

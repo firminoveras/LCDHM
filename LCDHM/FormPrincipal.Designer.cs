@@ -25,7 +25,7 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrincipal));
-            this.serial = new System.IO.Ports.SerialPort(this.components);
+            this.serial = new LCDHM.Nextion(this.components);
             this.icone = new System.Windows.Forms.NotifyIcon(this.components);
             this.menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,12 +49,6 @@
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // serial
-            // 
-            this.serial.BaudRate = 115200;
-            this.serial.PortName = "COM4";
-            this.serial.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.Serial_Recebeu);
             // 
             // icone
             // 
@@ -273,8 +267,7 @@
         }
 
         #endregion
-
-        private System.IO.Ports.SerialPort serial;
+        private LCDHM.Nextion serial;
         private System.Windows.Forms.NotifyIcon icone;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ContextMenuStrip menu;
