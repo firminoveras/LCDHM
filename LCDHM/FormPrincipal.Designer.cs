@@ -27,24 +27,24 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrincipal));
             this.IconeNotificacao = new System.Windows.Forms.NotifyIcon(this.components);
             this.MenuContexto = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu_portas = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menu_Desconectar = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_Atualizar = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.menu_Configurar = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_Sobre = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_Sair = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.Text_MSI_Diretorio = new System.Windows.Forms.TextBox();
-            this.BT_Buscar_MSI = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.BT_Buscar_MSI = new System.Windows.Forms.Button();
             this.FileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.BT_Buscar_Steam = new System.Windows.Forms.Button();
             this.Text_Steam_Diretorio = new System.Windows.Forms.TextBox();
             this.BT_Aplicar = new System.Windows.Forms.Button();
             this.serial = new System.IO.Ports.SerialPort(this.components);
+            this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Desconectar = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Atualizar = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Configurar = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Sobre = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Sair = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContexto.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -54,14 +54,15 @@
             // 
             this.IconeNotificacao.ContextMenuStrip = this.MenuContexto;
             this.IconeNotificacao.Icon = ((System.Drawing.Icon)(resources.GetObject("IconeNotificacao.Icon")));
-            this.IconeNotificacao.Text = "LCDhm";
+            this.IconeNotificacao.Text = "LCDHM";
             this.IconeNotificacao.Visible = true;
             // 
             // MenuContexto
             // 
             this.MenuContexto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.MenuContexto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MenuContexto.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MenuContexto.Font = new System.Drawing.Font("Tw Cen MT", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MenuContexto.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.MenuContexto.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_Conectar,
             this.menu_Desconectar,
@@ -71,18 +72,9 @@
             this.menu_Sobre,
             this.menu_Sair});
             this.MenuContexto.Name = "menu";
-            this.MenuContexto.ShowImageMargin = false;
-            this.MenuContexto.Size = new System.Drawing.Size(126, 142);
-            // 
-            // menu_Conectar
-            // 
-            this.menu_Conectar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.menu_Conectar.DropDown = this.Menu_portas;
-            this.menu_Conectar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Conectar.Name = "menu_Conectar";
-            this.menu_Conectar.Size = new System.Drawing.Size(125, 22);
-            this.menu_Conectar.Text = "Conectar";
+            this.MenuContexto.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.MenuContexto.ShowItemToolTips = false;
+            this.MenuContexto.Size = new System.Drawing.Size(159, 166);
             // 
             // Menu_portas
             // 
@@ -90,57 +82,13 @@
             this.Menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Menu_portas.Name = "menu";
-            this.Menu_portas.ShowImageMargin = false;
-            this.Menu_portas.Size = new System.Drawing.Size(36, 4);
-            // 
-            // menu_Desconectar
-            // 
-            this.menu_Desconectar.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Desconectar.Name = "menu_Desconectar";
-            this.menu_Desconectar.Size = new System.Drawing.Size(125, 22);
-            this.menu_Desconectar.Text = "Desconectar";
-            this.menu_Desconectar.Visible = false;
-            this.menu_Desconectar.Click += new System.EventHandler(this.Menu_Desconectar_Click);
-            // 
-            // menu_Atualizar
-            // 
-            this.menu_Atualizar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.menu_Atualizar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_Atualizar.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Atualizar.Name = "menu_Atualizar";
-            this.menu_Atualizar.Size = new System.Drawing.Size(125, 22);
-            this.menu_Atualizar.Text = "Atualizar";
-            this.menu_Atualizar.Click += new System.EventHandler(this.Menu_Atualizar_Click);
+            this.Menu_portas.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.Menu_portas.Size = new System.Drawing.Size(61, 4);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(122, 6);
-            // 
-            // menu_Configurar
-            // 
-            this.menu_Configurar.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Configurar.Name = "menu_Configurar";
-            this.menu_Configurar.Size = new System.Drawing.Size(125, 22);
-            this.menu_Configurar.Text = "Configurar";
-            this.menu_Configurar.Click += new System.EventHandler(this.Menu_Configurar_Click);
-            // 
-            // menu_Sobre
-            // 
-            this.menu_Sobre.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Sobre.Name = "menu_Sobre";
-            this.menu_Sobre.Size = new System.Drawing.Size(125, 22);
-            this.menu_Sobre.Text = "Sobre";
-            // 
-            // menu_Sair
-            // 
-            this.menu_Sair.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.menu_Sair.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_Sair.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Sair.Name = "menu_Sair";
-            this.menu_Sair.Size = new System.Drawing.Size(125, 22);
-            this.menu_Sair.Text = "Sair";
-            this.menu_Sair.Click += new System.EventHandler(this.Menu_Sair_Click);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
             // 
             // timer
             // 
@@ -158,19 +106,6 @@
             this.Text_MSI_Diretorio.Size = new System.Drawing.Size(587, 22);
             this.Text_MSI_Diretorio.TabIndex = 3;
             // 
-            // BT_Buscar_MSI
-            // 
-            this.BT_Buscar_MSI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.BT_Buscar_MSI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_Buscar_MSI.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.BT_Buscar_MSI.Location = new System.Drawing.Point(599, 24);
-            this.BT_Buscar_MSI.Name = "BT_Buscar_MSI";
-            this.BT_Buscar_MSI.Size = new System.Drawing.Size(75, 30);
-            this.BT_Buscar_MSI.TabIndex = 4;
-            this.BT_Buscar_MSI.Text = "Buscar";
-            this.BT_Buscar_MSI.UseVisualStyleBackColor = false;
-            this.BT_Buscar_MSI.Click += new System.EventHandler(this.BT_Buscar_MSI_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.BT_Buscar_MSI);
@@ -183,6 +118,19 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Localização do MSIAfterburner";
+            // 
+            // BT_Buscar_MSI
+            // 
+            this.BT_Buscar_MSI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BT_Buscar_MSI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BT_Buscar_MSI.ForeColor = System.Drawing.SystemColors.ScrollBar;
+            this.BT_Buscar_MSI.Location = new System.Drawing.Point(599, 26);
+            this.BT_Buscar_MSI.Name = "BT_Buscar_MSI";
+            this.BT_Buscar_MSI.Size = new System.Drawing.Size(75, 30);
+            this.BT_Buscar_MSI.TabIndex = 4;
+            this.BT_Buscar_MSI.Text = "Buscar";
+            this.BT_Buscar_MSI.UseVisualStyleBackColor = false;
+            this.BT_Buscar_MSI.Click += new System.EventHandler(this.BT_Buscar_MSI_Click);
             // 
             // FileDialog
             // 
@@ -220,7 +168,7 @@
             this.Text_Steam_Diretorio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.Text_Steam_Diretorio.Font = new System.Drawing.Font("Tw Cen MT", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Text_Steam_Diretorio.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.Text_Steam_Diretorio.Location = new System.Drawing.Point(6, 30);
+            this.Text_Steam_Diretorio.Location = new System.Drawing.Point(6, 28);
             this.Text_Steam_Diretorio.Name = "Text_Steam_Diretorio";
             this.Text_Steam_Diretorio.ReadOnly = true;
             this.Text_Steam_Diretorio.Size = new System.Drawing.Size(587, 22);
@@ -244,6 +192,64 @@
             // 
             this.serial.BaudRate = 115200;
             this.serial.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.Serial_Recebeu);
+            // 
+            // menu_Conectar
+            // 
+            this.menu_Conectar.DropDown = this.Menu_portas;
+            this.menu_Conectar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.menu_Conectar.Image = global::LCDHM.Properties.Resources.link;
+            this.menu_Conectar.Name = "menu_Conectar";
+            this.menu_Conectar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Conectar.Text = "Conectar";
+            // 
+            // menu_Desconectar
+            // 
+            this.menu_Desconectar.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.menu_Desconectar.Image = global::LCDHM.Properties.Resources.broken_link;
+            this.menu_Desconectar.Name = "menu_Desconectar";
+            this.menu_Desconectar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Desconectar.Text = "Desconectar";
+            this.menu_Desconectar.Visible = false;
+            this.menu_Desconectar.Click += new System.EventHandler(this.Menu_Desconectar_Click);
+            // 
+            // menu_Atualizar
+            // 
+            this.menu_Atualizar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_Atualizar.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.menu_Atualizar.Image = global::LCDHM.Properties.Resources.repeat;
+            this.menu_Atualizar.Name = "menu_Atualizar";
+            this.menu_Atualizar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Atualizar.Text = "Atualizar";
+            this.menu_Atualizar.Click += new System.EventHandler(this.Menu_Atualizar_Click);
+            // 
+            // menu_Configurar
+            // 
+            this.menu_Configurar.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.menu_Configurar.Image = global::LCDHM.Properties.Resources.settings_6;
+            this.menu_Configurar.Name = "menu_Configurar";
+            this.menu_Configurar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Configurar.Text = "Configurar";
+            this.menu_Configurar.Click += new System.EventHandler(this.Menu_Configurar_Click);
+            // 
+            // menu_Sobre
+            // 
+            this.menu_Sobre.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.menu_Sobre.Image = global::LCDHM.Properties.Resources.info;
+            this.menu_Sobre.Name = "menu_Sobre";
+            this.menu_Sobre.Size = new System.Drawing.Size(158, 26);
+            this.menu_Sobre.Text = "Sobre";
+            this.menu_Sobre.Click += new System.EventHandler(this.Menu_Sobre_Click);
+            // 
+            // menu_Sair
+            // 
+            this.menu_Sair.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_Sair.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.menu_Sair.Image = global::LCDHM.Properties.Resources.error;
+            this.menu_Sair.Name = "menu_Sair";
+            this.menu_Sair.Size = new System.Drawing.Size(158, 26);
+            this.menu_Sair.Text = "Sair";
+            this.menu_Sair.Click += new System.EventHandler(this.Menu_Sair_Click);
             // 
             // FormPrincipal
             // 

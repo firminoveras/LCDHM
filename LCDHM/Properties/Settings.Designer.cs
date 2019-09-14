@@ -46,5 +46,17 @@ namespace LCDHM.Properties {
                 this["MSI_Directory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("COM1")]
+        public string COM_Favorita {
+            get {
+                return ((string)(this["COM_Favorita"]));
+            }
+            set {
+                this["COM_Favorita"] = value;
+            }
+        }
     }
 }

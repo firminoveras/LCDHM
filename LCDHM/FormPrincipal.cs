@@ -61,41 +61,20 @@ namespace LCDHM {
                 if (entrada.Contains("p4")) MudarPagina(4);
                 if (entrada.Contains("p5")) MudarPagina(5);
                 if (entrada.Contains("p6")) MudarPagina(6);
-                if (entrada.Contains("p7")) {
-                    ANALISE_LINHA = 0;
-                    MudarPagina(7);
-                }
+                if (entrada.Contains("p7")) { ANALISE_LINHA = 0; MudarPagina(7); }
                 if (entrada.Contains("analise_gravar") && ANALISE_LINHA < 7) ANALISE_LINHA++;
                 if (entrada.Contains("analise_limpar")) ANALISE_LINHA = 0;
                 if (entrada.Contains("analise_auto")) ANALISE_MIN_FPS = Convert.ToInt32(entrada.Replace("analise_auto", ""));
-
-                if (entrada.Contains("fps_reset")) {
-                    FPS_MAX = 0;
-                    FPS_MIN = 0;
-                    Enviar("GPU.t6", "-");
-                    Enviar("GPU.t7", "-");
-                }
+                if (entrada.Contains("fps_reset")) { FPS_MAX = 0; FPS_MIN = 0; Enviar("GPU.t6", "-"); Enviar("GPU.t7", "-"); }
                 if (entrada.Contains("core_min") && CORE_BOOST > -200) { CORE_BOOST -= 25; AtualizarClocks(); }
                 if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += 25; AtualizarClocks(); Console.WriteLine(CM.GpuEntries[0].CoreClockBoostCur); }
                 if (entrada.Contains("core_rst")) { CORE_BOOST = 0; AtualizarClocks(); }
                 if (entrada.Contains("mem_min") && MEM_BOOST > -200) { MEM_BOOST -= 25; AtualizarClocks(); }
                 if (entrada.Contains("mem_max") && MEM_BOOST < 200) { MEM_BOOST += 25; AtualizarClocks(); }
                 if (entrada.Contains("mem_rst")) { MEM_BOOST = 0; AtualizarClocks(); }
-                if (entrada.Contains("fan_min") && FAN_BOOST > 39) {
-                    FAN_BOOST -= 10;
-                    FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None;
-                    AtualizarClocks();
-                }
-                if (entrada.Contains("fan_max") && FAN_BOOST < 91) {
-                    FAN_BOOST += 10;
-                    FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None;
-                    AtualizarClocks();
-                }
-                if (entrada.Contains("fan_auto")) {
-                    FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO;
-                    FAN_BOOST = 30;
-                    AtualizarClocks();
-                }
+                if (entrada.Contains("fan_min") && FAN_BOOST > 39) { FAN_BOOST -= 10; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; AtualizarClocks(); }
+                if (entrada.Contains("fan_max") && FAN_BOOST < 91) { FAN_BOOST += 10; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; AtualizarClocks(); }
+                if (entrada.Contains("fan_auto")) { FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO; FAN_BOOST = 30; AtualizarClocks(); }
                 if (entrada.Contains("oc_aplicar")) {
                     CM.GpuEntries[0].CoreClockBoostCur = CORE_BOOST * 1000;
                     CM.GpuEntries[0].MemoryClockBoostCur = MEM_BOOST * 1000;
@@ -109,13 +88,8 @@ namespace LCDHM {
                 if (entrada.Contains("HD_min")) if (HDD_INDEX > 1) HDD_INDEX--; else HDD_INDEX = 9;
                 if (entrada.Contains("NET_max")) if (NET_INDEX < 9) NET_INDEX++; else NET_INDEX = 1;
                 if (entrada.Contains("NET_min")) if (NET_INDEX > 1) NET_INDEX--; else NET_INDEX = 9;
-                if (entrada.Contains("Steam")) {
-                    try {
-                        Process.Start(Properties.Settings.Default.Steam_Directory);
-                    } catch (Exception) {
-                        Mostrar_Configuracoes();
-                    }
-                }
+                if (entrada.Contains("Steam")) try { Process.Start(Properties.Settings.Default.Steam_Directory); } catch (Exception) { Mostrar_Configuracoes(); }
+
                 //TODO: Não funciona.
                 if (entrada.Contains("delay")) {
                     Console.WriteLine(timer.Interval);
@@ -225,10 +199,11 @@ namespace LCDHM {
                     Enviar("s0", 2, int.Parse(GetEntidade("framerate").Data.ToString("N0")), 0, 71, 0, 71);
                     Enviar("GRAFICO.t33", GetEntidade("Memory usage").Data.ToString("N0") + " MB");
                     Enviar("GRAFICO.t34", GetEntidade("GPU temperature").Data.ToString() + " C");
-                    Enviar("s1", 0, int.Parse(GetEntidade("Memory usage").Data.ToString("N0")), 0, Convert.ToInt32(GetEntidade("Total Committed").Data), 0, 51);
+                    //TODO: Obter MB da GPU
+                    Enviar("s1", 0, int.Parse(((GetEntidade("Memory usage").Data / 4096) * 100).ToString("N0")), 0, 100, 0, 51);
                     Enviar("GRAFICO.t35", GetEntidade("CPU clock").Data.ToString("N0") + " MHz");
                     Enviar("GRAFICO.t36", GetEntidade("CPU temperature").Data.ToString() + " C");
-                    //FAZER SOZINHO
+                    //TODO: Obter Clock da CPU
                     Enviar("s2", 0, int.Parse(((GetEntidade("CPU clock").Data / 3900) * 100).ToString("N0")), 0, 100, 0, 51);
                     Enviar("GRAFICO.t37", RAM_Uso2.ToString("N0") + " MB");
                     Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
@@ -236,8 +211,8 @@ namespace LCDHM {
                     break;
                 case 7:
                     fps = Convert.ToInt32(GetEntidade("Framerate").Data);
-                    if (fps <= ANALISE_MIN_FPS && ANALISE_LINHA < 7 && fps != 0) ANALISE_LINHA++;
                     Enviar("ANALISE.t" + ANALISE_LINHA + "0", fps.ToString("N0"));
+                    if (fps < ANALISE_MIN_FPS) Enviar("t" + ANALISE_LINHA + "0", Color.Red); else Enviar("t" + ANALISE_LINHA + "0", Color.FromArgb(255, 0, 184, 192));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "1", GetEntidade("GPU usage").Data.ToString("N0"));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "2", GetEntidade("Memory usage").Data.ToString("N0").Replace(".", ""));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "3", GetEntidade("GPU Temperature").Data.ToString("N0"));
@@ -245,6 +220,7 @@ namespace LCDHM {
                     Enviar("ANALISE.t" + ANALISE_LINHA + "5", GetEntidade("CPU temperature").Data.ToString("N0"));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "6", GetEntidade("RAM usage").Data.ToString("N0").Replace(".", ""));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "7", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+                    if (fps < ANALISE_MIN_FPS && ANALISE_LINHA < 7 && fps != 0) ANALISE_LINHA++;
                     break;
 
                 //SrcName = CPU voltage; SrcUnits = V; LocalizedSourceName = Tensão da CPU; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 2; Flags = None; GPU = 4294967295; SrcId = 241
@@ -280,6 +256,8 @@ namespace LCDHM {
                 menu_Atualizar.Visible = false;
                 menu_Desconectar.Visible = true;
                 serial.WriteLine("page 0");
+                Properties.Settings.Default.COM_Favorita = serial.PortName;
+                Properties.Settings.Default.Save();
                 timer.Start();
             } else {
                 IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar.", ToolTipIcon.Error);
@@ -294,13 +272,12 @@ namespace LCDHM {
                 menu_Conectar.Visible = true;
                 menu_Atualizar.Visible = true;
                 menu_Desconectar.Visible = false;
-                HM.Disconnect();
-                CM.Disconnect();
+                if (HM != null) HM.Disconnect();
+                if (CM != null) CM.Disconnect();
                 serial.Close();
                 IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
             }
         }
-
         private void ConectarMSI() {
             Enviar("j0", 10);
             Enviar("t", "Inicializando MSI");
@@ -400,11 +377,19 @@ namespace LCDHM {
             Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
             if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) Enviar("Overclock.tfan", "AUTO"); else Enviar("Overclock.tfan", FAN_BOOST.ToString());
         }
+             
         private void AtualizarPortas() {
             Menu_portas.Items.Clear();
-            foreach (String port in SerialPort.GetPortNames()) Menu_portas.Items.Add(port, null, ConectarCORE);
+            foreach (String port in SerialPort.GetPortNames()) {
+                Bitmap b = null;
+                if (port == Properties.Settings.Default.COM_Favorita) {
+                    b = Properties.Resources.star;
+                }
+                Menu_portas.Items.Add(port, b, ConectarCORE);
+            }
         }
 
+        //Métodos de Eventos dos botões do ícone de bandeija
         private void Menu_Atualizar_Click(object sender, EventArgs e) {
             AtualizarPortas();
             IconeNotificacao.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
@@ -413,26 +398,33 @@ namespace LCDHM {
         private void Menu_Configurar_Click(object sender, EventArgs e) {
             Mostrar_Configuracoes();
         }
+        private void Menu_Sobre_Click(object sender, EventArgs e) {
+
+        }
         private void Menu_Sair_Click(object sender, EventArgs e) {
             DesconectarCORE();
             Application.Exit();
         }
 
+        //Métodos de Visibilidade da Form de Configurações
         private void Mostrar_Configuracoes() {
             CenterToScreen();
+            this.Show();
             this.Opacity = 100;
             this.ShowInTaskbar = true;
         }
         private void Ocultar_Configuracoes() {
             this.Location = new Point(-10000, -10000);
+            this.Hide();
             this.Opacity = 0;
             this.ShowInTaskbar = false;
         }
 
+        //Métodos de Envio de Dados para o Nextion
         public void Enviar(String Comando) => serial.WriteLine(Comando);
         public void Enviar(String Variavel, String Texto) => serial.WriteLine(Variavel + ".txt=\"" + Texto + "\"");
         public void Enviar(String Variavel, int Valor) => serial.WriteLine(Variavel + ".val=" + Valor);
         public void Enviar(String Variavel, int Chanel, int Valor, int In_min, int In_max, int Out_min, int Out_max) => serial.WriteLine("add " + Variavel + ".id" + "," + Chanel.ToString() + "," + ((Valor - In_min) * (Out_max - Out_min) / (In_max - In_min) + Out_min).ToString("N0"));
-        public void Enviar(String Variavel, Color c) => serial.WriteLine(Variavel + ".pco=" + ((c.R >> 3) << 11) + ((c.G >> 2) << 5) + (c.B >> 3));
+        public void Enviar(String Variavel, Color c) => serial.WriteLine(Variavel + ".pco=" + (((c.R >> 3) << 11) + ((c.G >> 2) << 5) + (c.B >> 3)).ToString("N0").Replace(".", ""));
     }
 }
