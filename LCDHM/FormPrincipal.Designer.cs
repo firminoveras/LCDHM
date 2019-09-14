@@ -59,7 +59,7 @@
             // 
             // MenuContexto
             // 
-            this.MenuContexto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.MenuContexto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.MenuContexto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.MenuContexto.Font = new System.Drawing.Font("Tw Cen MT", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MenuContexto.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -74,11 +74,11 @@
             this.MenuContexto.Name = "menu";
             this.MenuContexto.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.MenuContexto.ShowItemToolTips = false;
-            this.MenuContexto.Size = new System.Drawing.Size(159, 166);
+            this.MenuContexto.Size = new System.Drawing.Size(185, 188);
             // 
             // Menu_portas
             // 
-            this.Menu_portas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Menu_portas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.Menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Menu_portas.Name = "menu";
@@ -88,7 +88,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
             // timer
             // 
@@ -97,7 +97,7 @@
             // 
             // Text_MSI_Diretorio
             // 
-            this.Text_MSI_Diretorio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Text_MSI_Diretorio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.Text_MSI_Diretorio.Font = new System.Drawing.Font("Tw Cen MT", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Text_MSI_Diretorio.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.Text_MSI_Diretorio.Location = new System.Drawing.Point(6, 30);
@@ -121,7 +121,7 @@
             // 
             // BT_Buscar_MSI
             // 
-            this.BT_Buscar_MSI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BT_Buscar_MSI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.BT_Buscar_MSI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_Buscar_MSI.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.BT_Buscar_MSI.Location = new System.Drawing.Point(599, 26);
@@ -152,7 +152,7 @@
             // 
             // BT_Buscar_Steam
             // 
-            this.BT_Buscar_Steam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BT_Buscar_Steam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.BT_Buscar_Steam.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_Buscar_Steam.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.BT_Buscar_Steam.Location = new System.Drawing.Point(599, 24);
@@ -165,7 +165,7 @@
             // 
             // Text_Steam_Diretorio
             // 
-            this.Text_Steam_Diretorio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Text_Steam_Diretorio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.Text_Steam_Diretorio.Font = new System.Drawing.Font("Tw Cen MT", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Text_Steam_Diretorio.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.Text_Steam_Diretorio.Location = new System.Drawing.Point(6, 28);
@@ -176,7 +176,7 @@
             // 
             // BT_Aplicar
             // 
-            this.BT_Aplicar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.BT_Aplicar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.BT_Aplicar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_Aplicar.Font = new System.Drawing.Font("Tw Cen MT", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_Aplicar.ForeColor = System.Drawing.SystemColors.ScrollBar;
@@ -200,7 +200,7 @@
             this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Conectar.Image = global::LCDHM.Properties.Resources.link;
             this.menu_Conectar.Name = "menu_Conectar";
-            this.menu_Conectar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Conectar.Size = new System.Drawing.Size(184, 26);
             this.menu_Conectar.Text = "Conectar";
             // 
             // menu_Desconectar
@@ -208,7 +208,7 @@
             this.menu_Desconectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Desconectar.Image = global::LCDHM.Properties.Resources.broken_link;
             this.menu_Desconectar.Name = "menu_Desconectar";
-            this.menu_Desconectar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Desconectar.Size = new System.Drawing.Size(184, 26);
             this.menu_Desconectar.Text = "Desconectar";
             this.menu_Desconectar.Visible = false;
             this.menu_Desconectar.Click += new System.EventHandler(this.Menu_Desconectar_Click);
@@ -219,7 +219,7 @@
             this.menu_Atualizar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Atualizar.Image = global::LCDHM.Properties.Resources.repeat;
             this.menu_Atualizar.Name = "menu_Atualizar";
-            this.menu_Atualizar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Atualizar.Size = new System.Drawing.Size(184, 26);
             this.menu_Atualizar.Text = "Atualizar";
             this.menu_Atualizar.Click += new System.EventHandler(this.Menu_Atualizar_Click);
             // 
@@ -228,7 +228,7 @@
             this.menu_Configurar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Configurar.Image = global::LCDHM.Properties.Resources.settings_6;
             this.menu_Configurar.Name = "menu_Configurar";
-            this.menu_Configurar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Configurar.Size = new System.Drawing.Size(184, 26);
             this.menu_Configurar.Text = "Configurar";
             this.menu_Configurar.Click += new System.EventHandler(this.Menu_Configurar_Click);
             // 
@@ -237,7 +237,7 @@
             this.menu_Sobre.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Sobre.Image = global::LCDHM.Properties.Resources.info;
             this.menu_Sobre.Name = "menu_Sobre";
-            this.menu_Sobre.Size = new System.Drawing.Size(158, 26);
+            this.menu_Sobre.Size = new System.Drawing.Size(184, 26);
             this.menu_Sobre.Text = "Sobre";
             this.menu_Sobre.Click += new System.EventHandler(this.Menu_Sobre_Click);
             // 
@@ -247,7 +247,7 @@
             this.menu_Sair.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Sair.Image = global::LCDHM.Properties.Resources.error;
             this.menu_Sair.Name = "menu_Sair";
-            this.menu_Sair.Size = new System.Drawing.Size(158, 26);
+            this.menu_Sair.Size = new System.Drawing.Size(184, 26);
             this.menu_Sair.Text = "Sair";
             this.menu_Sair.Click += new System.EventHandler(this.Menu_Sair_Click);
             // 

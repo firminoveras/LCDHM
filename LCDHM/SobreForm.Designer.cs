@@ -23,29 +23,26 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BT_Fechar_Info = new System.Windows.Forms.Button();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox
             // 
-            this.groupBox.Controls.Add(this.label3);
             this.groupBox.Controls.Add(this.label2);
             this.groupBox.Controls.Add(this.label1);
             this.groupBox.Font = new System.Drawing.Font("Tw Cen MT", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.groupBox.ForeColor = System.Drawing.Color.White;
             this.groupBox.Location = new System.Drawing.Point(13, 127);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(330, 102);
+            this.groupBox.Size = new System.Drawing.Size(330, 68);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Sobre";
-            this.groupBox.Enter += new System.EventHandler(this.GroupBox1_Enter);
             // 
             // label1
             // 
@@ -61,18 +58,10 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(301, 19);
+            this.label2.Size = new System.Drawing.Size(288, 19);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Ícones por Prosymbols e em www.flaticon.com ";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 59);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(207, 19);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Desenvolvido por Firmino Veras";
+            this.label2.Text = "Ícones por RoundIcons em www.flaticon.com ";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
@@ -83,12 +72,27 @@
             this.panel1.Size = new System.Drawing.Size(331, 108);
             this.panel1.TabIndex = 1;
             // 
+            // BT_Fechar_Info
+            // 
+            this.BT_Fechar_Info.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.BT_Fechar_Info.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BT_Fechar_Info.Font = new System.Drawing.Font("Tw Cen MT", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BT_Fechar_Info.ForeColor = System.Drawing.SystemColors.ScrollBar;
+            this.BT_Fechar_Info.Location = new System.Drawing.Point(13, 201);
+            this.BT_Fechar_Info.Name = "BT_Fechar_Info";
+            this.BT_Fechar_Info.Size = new System.Drawing.Size(330, 30);
+            this.BT_Fechar_Info.TabIndex = 5;
+            this.BT_Fechar_Info.Text = "Sair";
+            this.BT_Fechar_Info.UseVisualStyleBackColor = false;
+            this.BT_Fechar_Info.Click += new System.EventHandler(this.BT_Fechar_Info_Click);
+            // 
             // SobreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(355, 241);
+            this.Controls.Add(this.BT_Fechar_Info);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.panel1);
             this.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -105,12 +109,10 @@
         }
 
         #endregion
-
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button BT_Fechar_Info;
     }
 }

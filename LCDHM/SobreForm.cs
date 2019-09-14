@@ -12,10 +12,12 @@ namespace LCDHM {
     public partial class SobreForm : Form {
         public SobreForm() {
             InitializeComponent();
+            CenterToScreen();
         }
 
-        private void GroupBox1_Enter(object sender, EventArgs e) {
-
+        private void BT_Fechar_Info_Click(object sender, EventArgs e) {
+            Close();
+            Dispose();
         }
     }
 }

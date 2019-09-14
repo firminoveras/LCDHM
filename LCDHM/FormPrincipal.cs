@@ -108,7 +108,10 @@ namespace LCDHM {
 
             }
         }
-
+        private void MudarPagina(int PG_Index) {
+            PAGINA = PG_Index;
+            Enviar_Automatico();
+        }
         private void TimerTick(object sender, EventArgs e) => Enviar_Automatico();
         private void Enviar_Automatico() {
             int fps;
@@ -335,7 +338,6 @@ namespace LCDHM {
             Thread.Sleep(600);
             Enviar("page Principal");
         }
-
         private HardwareMonitorEntry GetEntidade(String nome) {
             foreach (HardwareMonitorEntry e in HM.Entries) {
                 if (e.SrcName.Equals(nome)) {
@@ -346,6 +348,58 @@ namespace LCDHM {
             return new HardwareMonitorEntry();
         }
 
+        private void AtualizarClocks() {
+            CM.ReloadAll();
+            String sinalCore = "", sinalMem = ""; ;
+            if (CORE_BOOST >= 0) sinalCore = "+";
+            if (MEM_BOOST >= 0) sinalMem = "+";
+            Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalCore + CORE_BOOST);
+            Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
+            if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) Enviar("Overclock.tfan", "AUTO"); else Enviar("Overclock.tfan", FAN_BOOST.ToString());
+        }
+        private void AtualizarPortas() {
+            Menu_portas.Items.Clear();
+            foreach (String port in SerialPort.GetPortNames()) {
+                Bitmap b = null;
+                if (port == Properties.Settings.Default.COM_Favorita) {
+                    b = Properties.Resources.star;
+                }
+                Menu_portas.Items.Add(port, b, ConectarCORE);
+            }
+        }
+
+        private void Menu_Atualizar_Click(object sender, EventArgs e) {
+            AtualizarPortas();
+            IconeNotificacao.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
+        }
+        private void Menu_Desconectar_Click(object sender, EventArgs e) => DesconectarCORE();
+        private void Menu_Configurar_Click(object sender, EventArgs e) {
+            Mostrar_Configuracoes();
+        }
+
+        //TODO: Mudar Cor do Item selecionado
+        private void MouseEnter_MenuContexto(object sender, EventArgs e) {
+            ((ToolStripMenuItem)sender).BackColor = Color.Red;
+        }
+
+        private void Menu_Sobre_Click(object sender, EventArgs e) => new SobreForm().Show();
+        private void Menu_Sair_Click(object sender, EventArgs e) {
+            DesconectarCORE();
+            Application.Exit();
+        }
+
+        private void Mostrar_Configuracoes() {
+            CenterToScreen();
+            this.Show();
+            this.Opacity = 100;
+            this.ShowInTaskbar = true;
+        }
+        private void Ocultar_Configuracoes() {
+            this.Location = new Point(-10000, -10000);
+            this.Hide();
+            this.Opacity = 0;
+            this.ShowInTaskbar = false;
+        }
         private void BT_Buscar_Steam_Click(object sender, EventArgs e) {
             if (FileDialog.ShowDialog().ToString() == "OK") Text_Steam_Diretorio.Text = FileDialog.FileName;
         }
@@ -363,64 +417,6 @@ namespace LCDHM {
             if (FileDialog.ShowDialog().ToString() == "OK") Text_MSI_Diretorio.Text = FileDialog.FileName;
         }
 
-        private void MudarPagina(int PG_Index) {
-            PAGINA = PG_Index;
-            Enviar_Automatico();
-        }
-
-        private void AtualizarClocks() {
-            CM.ReloadAll();
-            String sinalCore = "", sinalMem = ""; ;
-            if (CORE_BOOST >= 0) sinalCore = "+";
-            if (MEM_BOOST >= 0) sinalMem = "+";
-            Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalCore + CORE_BOOST);
-            Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
-            if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) Enviar("Overclock.tfan", "AUTO"); else Enviar("Overclock.tfan", FAN_BOOST.ToString());
-        }
-             
-        private void AtualizarPortas() {
-            Menu_portas.Items.Clear();
-            foreach (String port in SerialPort.GetPortNames()) {
-                Bitmap b = null;
-                if (port == Properties.Settings.Default.COM_Favorita) {
-                    b = Properties.Resources.star;
-                }
-                Menu_portas.Items.Add(port, b, ConectarCORE);
-            }
-        }
-
-        //Métodos de Eventos dos botões do ícone de bandeija
-        private void Menu_Atualizar_Click(object sender, EventArgs e) {
-            AtualizarPortas();
-            IconeNotificacao.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
-        }
-        private void Menu_Desconectar_Click(object sender, EventArgs e) => DesconectarCORE();
-        private void Menu_Configurar_Click(object sender, EventArgs e) {
-            Mostrar_Configuracoes();
-        }
-        private void Menu_Sobre_Click(object sender, EventArgs e) {
-
-        }
-        private void Menu_Sair_Click(object sender, EventArgs e) {
-            DesconectarCORE();
-            Application.Exit();
-        }
-
-        //Métodos de Visibilidade da Form de Configurações
-        private void Mostrar_Configuracoes() {
-            CenterToScreen();
-            this.Show();
-            this.Opacity = 100;
-            this.ShowInTaskbar = true;
-        }
-        private void Ocultar_Configuracoes() {
-            this.Location = new Point(-10000, -10000);
-            this.Hide();
-            this.Opacity = 0;
-            this.ShowInTaskbar = false;
-        }
-
-        //Métodos de Envio de Dados para o Nextion
         public void Enviar(String Comando) => serial.WriteLine(Comando);
         public void Enviar(String Variavel, String Texto) => serial.WriteLine(Variavel + ".txt=\"" + Texto + "\"");
         public void Enviar(String Variavel, int Valor) => serial.WriteLine(Variavel + ".val=" + Valor);
