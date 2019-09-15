@@ -24,7 +24,9 @@ namespace LCDHM {
                 NET_INDEX = 1,
                 CORE_BOOST = 0,
                 MEM_BOOST = 0,
-                FAN_BOOST = 30;
+                FAN_BOOST = 30,
+                FAN_SENSIBILIDADE = 5,
+                CLOCK_SENSIBILIDADE = 25;
 
         private MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG
                 FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO;
@@ -66,20 +68,24 @@ namespace LCDHM {
                 if (entrada.Contains("analise_limpar")) ANALISE_LINHA = 0;
                 if (entrada.Contains("analise_auto")) ANALISE_MIN_FPS = Convert.ToInt32(entrada.Replace("analise_auto", ""));
                 if (entrada.Contains("fps_reset")) { FPS_MAX = 0; FPS_MIN = 0; Enviar("GPU.t6", "-"); Enviar("GPU.t7", "-"); }
-                if (entrada.Contains("core_min") && CORE_BOOST > -200) { CORE_BOOST -= 25; AtualizarClocks(); }
-                if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += 25; AtualizarClocks(); Console.WriteLine(CM.GpuEntries[0].CoreClockBoostCur); }
-                if (entrada.Contains("core_rst")) { CORE_BOOST = 0; AtualizarClocks(); }
-                if (entrada.Contains("mem_min") && MEM_BOOST > -200) { MEM_BOOST -= 25; AtualizarClocks(); }
-                if (entrada.Contains("mem_max") && MEM_BOOST < 200) { MEM_BOOST += 25; AtualizarClocks(); }
-                if (entrada.Contains("mem_rst")) { MEM_BOOST = 0; AtualizarClocks(); }
-                if (entrada.Contains("fan_min") && FAN_BOOST > 39) { FAN_BOOST -= 10; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; AtualizarClocks(); }
-                if (entrada.Contains("fan_max") && FAN_BOOST < 91) { FAN_BOOST += 10; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; AtualizarClocks(); }
-                if (entrada.Contains("fan_auto")) { FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO; FAN_BOOST = 30; AtualizarClocks(); }
+                if (entrada.Contains("core_min") && CORE_BOOST > -200) { CORE_BOOST -= CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tcore", Color.Red); }
+                if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += CLOCK_SENSIBILIDADE; AtualizarClocks(); Console.WriteLine(CM.GpuEntries[0].CoreClockBoostCur); Enviar("Overclock.tcore", Color.Red); }
+                if (entrada.Contains("core_rst")) { CORE_BOOST = 0; AtualizarClocks(); Enviar("Overclock.tcore", Color.Red); }
+                if (entrada.Contains("mem_min") && MEM_BOOST > -200) { MEM_BOOST -= CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tmem", Color.Red); }
+                if (entrada.Contains("mem_max") && MEM_BOOST < 200) { MEM_BOOST += CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tmem", Color.Red); }
+                if (entrada.Contains("mem_rst")) { MEM_BOOST = 0; AtualizarClocks(); Enviar("Overclock.tmem", Color.Red); }
+                if (entrada.Contains("fan_min") && FAN_BOOST > 31 + FAN_SENSIBILIDADE) { FAN_BOOST -= FAN_SENSIBILIDADE; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; AtualizarClocks(); Enviar("Overclock.tfan", Color.Red); }
+                if (entrada.Contains("fan_max") && FAN_BOOST < 100 - FAN_SENSIBILIDADE) { FAN_BOOST += FAN_SENSIBILIDADE; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; AtualizarClocks(); Enviar("Overclock.tfan", Color.Red); }
+                if (entrada.Contains("fan_auto")) { FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO; FAN_BOOST = 30; AtualizarClocks(); Enviar("Overclock.tfan", Color.Red); }
                 if (entrada.Contains("oc_aplicar")) {
                     CM.GpuEntries[0].CoreClockBoostCur = CORE_BOOST * 1000;
                     CM.GpuEntries[0].MemoryClockBoostCur = MEM_BOOST * 1000;
                     CM.GpuEntries[0].FanFlagsCur = FAN_FLAG;
                     if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None) CM.GpuEntries[0].FanSpeedCur = uint.Parse(FAN_BOOST.ToString());
+                    Enviar("Overclock.tcore", Color.FromArgb(255, 0, 184, 192));
+                    Enviar("Overclock.tmem", Color.FromArgb(255, 0, 184, 192));
+                    Enviar("Overclock.tfan", Color.FromArgb(255, 0, 184, 192));
+
                     CM.CommitChanges();
                     AtualizarClocks();
                 }
@@ -146,8 +152,8 @@ namespace LCDHM {
                     Enviar("gGPU", 0, fps, 0, 100, 0, 100);
                     Enviar("gGPU", 1, int.Parse(GetEntidade("GPU temperature").Data.ToString("N0")), 0, 100, 0, 100);
                     Enviar("Overclock.t11", GetEntidade("GPU temperature").Data.ToString() + " C");
-                    Enviar("Overclock.t10", fps.ToString() + " fps");
-                    Enviar("line 11,160,311,160,1024");
+                    Enviar("Overclock.t10", fps.ToString() + " FPS");
+                    Enviar("gGPU", 2, 60, 0, 100, 0, 100);
                     break;
                 case 3:
                     Enviar("CPU.t12", GetEntidade("CPU usage").Data.ToString("N0"));
@@ -156,19 +162,16 @@ namespace LCDHM {
                     Enviar("CPU.t0", GetEntidade("CPU clock").Data.ToString("N0"));
                     Enviar("CPU.t15", CPU_CORES.ToString());
                     Enviar("CPU.t16", CPU_THREADS.ToString());
-                    String cpus = "";
-                    //MONOSPAÇAR
-                    for (int i = 1; i < CPU_THREADS; i++) {
+                    String cpus = "|";
+                    for (int i = 1; i <= CPU_THREADS; i++) {
                         String porcentagem = GetEntidade("CPU" + i.ToString() + " usage").Data.ToString("N0");
                         switch (porcentagem.Length) {
-                            case 1: porcentagem = "0" + porcentagem + "%"; break;
+                            case 1: porcentagem = porcentagem.Equals("0") ? "   " : " " + porcentagem + "%"; break;
                             case 2: porcentagem += "%"; break;
                             case 3: porcentagem = "MAX"; break;
                         }
-                        cpus += porcentagem + "  ";
+                        cpus += " " + porcentagem + " |";
                     }
-
-
                     Enviar("CPU.t17", cpus);
                     Enviar("gCPU", 0, int.Parse(GetEntidade("CPU usage").Data.ToString("N0")), 0, 100, 0, 81);
                     Enviar("gCPU", 1, int.Parse(GetEntidade("CPU temperature").Data.ToString("N0")), 0, 100, 0, 81);
@@ -176,17 +179,17 @@ namespace LCDHM {
                 case 4:
                     float RAM_Uso = GetEntidade("RAM usage").Data;
                     float RAM_Porcentagem = (RAM_Uso / RAM_TOTAL) * 100;
-                    Enviar("MEM.t18", RAM_Porcentagem.ToString("N0"));
+                    Enviar("MEM.t18", RAM_Porcentagem.ToString("N1"));
                     Enviar("MEM.j1", int.Parse(RAM_Porcentagem.ToString("N0")));
                     Enviar("MEM.t19", RAM_Uso.ToString("N0"));
-                    Enviar("MEM.t20", GetEntidade("HDD" + HDD_INDEX.ToString() + " read rate").Data.ToString("N0"));
-                    Enviar("MEM.t21", GetEntidade("HDD" + HDD_INDEX.ToString() + " write rate").Data.ToString("N0"));
-                    Enviar("MEM.t22", GetEntidade("HDD" + HDD_INDEX.ToString() + " temperature").Data.ToString("N0"));
-                    Enviar("MEM.t0", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+                    Enviar("MEM.t20", GetEntidade("HDD" + HDD_INDEX.ToString() + " read rate").Data.ToString("N3"));
+                    Enviar("MEM.t21", GetEntidade("HDD" + HDD_INDEX.ToString() + " write rate").Data.ToString("N3"));
+                    Enviar("MEM.t22", GetEntidade("HDD" + HDD_INDEX.ToString() + " temperature").Data.ToString("N1"));
+                    Enviar("MEM.t0", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N1"));
                     Enviar("MEM.t23", HDD_INDEX.ToString());
-                    Enviar("MEM.t25", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").Data.ToString("N0"));
+                    Enviar("MEM.t25", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").Data.ToString("N3"));
                     Enviar("MEM.t26", GetEntidade("NET" + NET_INDEX.ToString() + " download rate").SrcUnits.ToString());
-                    Enviar("MEM.t27", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").Data.ToString("N0"));
+                    Enviar("MEM.t27", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").Data.ToString("N3"));
                     Enviar("MEM.t28", GetEntidade("NET" + NET_INDEX.ToString() + " upload rate").SrcUnits.ToString());
                     Enviar("MEM.t29", NET_INDEX.ToString());
                     Enviar("gMEM", 0, int.Parse(RAM_Porcentagem.ToString("N0")), 0, 100, 0, 81);
@@ -215,21 +218,18 @@ namespace LCDHM {
                 case 7:
                     fps = Convert.ToInt32(GetEntidade("Framerate").Data);
                     Enviar("ANALISE.t" + ANALISE_LINHA + "0", fps.ToString("N0"));
-                    if (fps < ANALISE_MIN_FPS) Enviar("t" + ANALISE_LINHA + "0", Color.Red); else Enviar("t" + ANALISE_LINHA + "0", Color.FromArgb(255, 0, 184, 192));
+                    //if (fps < ANALISE_MIN_FPS && fps != 0) Enviar("t" + ANALISE_LINHA + "0", Color.Red); else Enviar("t" + ANALISE_LINHA + "0", Color.FromArgb(255, 0, 184, 192));
+                    Enviar("t" + ANALISE_LINHA + "0", fps < ANALISE_MIN_FPS && fps != 0 ? Color.Red : Color.FromArgb(255, 0, 184, 192));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "1", GetEntidade("GPU usage").Data.ToString("N0"));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "2", GetEntidade("Memory usage").Data.ToString("N0").Replace(".", ""));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "3", GetEntidade("GPU Temperature").Data.ToString("N0"));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "4", GetEntidade("CPU usage").Data.ToString("N0"));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "5", GetEntidade("CPU temperature").Data.ToString("N0"));
                     Enviar("ANALISE.t" + ANALISE_LINHA + "6", GetEntidade("RAM usage").Data.ToString("N0").Replace(".", ""));
-                    Enviar("ANALISE.t" + ANALISE_LINHA + "7", GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
+                    Enviar("ANALISE.t" + ANALISE_LINHA + "7", HDD_INDEX + ":" + GetEntidade("HDD" + HDD_INDEX.ToString() + " usage").Data.ToString("N0"));
                     if (fps < ANALISE_MIN_FPS && ANALISE_LINHA < 7 && fps != 0) ANALISE_LINHA++;
                     break;
 
-                //SrcName = CPU voltage; SrcUnits = V; LocalizedSourceName = Tensão da CPU; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 2; Flags = None; GPU = 4294967295; SrcId = 241
-                //SrcName = PSU + 3.3V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +3.3V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 5; Flags = None; GPU = 0; SrcId = 246
-                //SrcName = PSU + 5V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +5V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 10; Flags = None; GPU = 0; SrcId = 246
-                //SrcName = PSU + 12V voltage; SrcUnits = V; LocalizedSourceName = Tensão da Fonte +12V; LocalizedSrcUnits = V; RecommendedFormat = % .2f; Data = 0; MinLimit = 0; MaxLimit = 15; Flags = None; GPU = 0; SrcId = 246
                 case 6:
                     Enviar("PSU.t0", GetEntidade("Power").Data.ToString());
                     Enviar("PSU.t1", GetEntidade("CPU voltage").Data.ToString());
@@ -253,7 +253,7 @@ namespace LCDHM {
             serial.WriteLine("INIT");
             Thread.Sleep(1000);
             if (serial.BytesToRead > 0 && serial.ReadLine().Contains("Conectar")) {
-                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado a porta " + ((ToolStripItem)sender).Text + "...", ToolTipIcon.Warning);
+                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado a porta " + ((ToolStripItem)sender).Text, ToolTipIcon.Info);
                 Conectado = true;
                 menu_Conectar.Visible = false;
                 menu_Atualizar.Visible = false;
@@ -327,11 +327,12 @@ namespace LCDHM {
             foreach (System.Management.ManagementBaseObject item in managementObjectSearcher.Get()) this.CPU_CORES += int.Parse(item["NumberOfCores"].ToString());
             managementObjectSearcher.Dispose();
             Enviar("j0", 60);
-            RAM_TOTAL = (int)(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
+            RAM_TOTAL = Convert.ToInt32(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
 
             Enviar("j0", 70);
             Enviar("t", "Definindo Clocks");
             FAN_BOOST = int.Parse(CM.GpuEntries[0].FanSpeedCur.ToString("N0"));
+
 
             Enviar("j0", 100);
             Enviar("t", "Conectado");
@@ -350,20 +351,17 @@ namespace LCDHM {
 
         private void AtualizarClocks() {
             CM.ReloadAll();
-            String sinalCore = "", sinalMem = ""; ;
-            if (CORE_BOOST >= 0) sinalCore = "+";
-            if (MEM_BOOST >= 0) sinalMem = "+";
-            Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalCore + CORE_BOOST);
-            Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + sinalMem + MEM_BOOST);
-            if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO) Enviar("Overclock.tfan", "AUTO"); else Enviar("Overclock.tfan", FAN_BOOST.ToString());
+            Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (CORE_BOOST >= 0 ? "+" : "") + CORE_BOOST + ")");
+            Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (MEM_BOOST >= 0 ? "+" : "") + MEM_BOOST + ")");
+            Enviar("Overclock.tfan", FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO ? "AUTO" : FAN_BOOST.ToString());
+
+
         }
         private void AtualizarPortas() {
             Menu_portas.Items.Clear();
             foreach (String port in SerialPort.GetPortNames()) {
                 Bitmap b = null;
-                if (port == Properties.Settings.Default.COM_Favorita) {
-                    b = Properties.Resources.star;
-                }
+                if (port == Properties.Settings.Default.COM_Favorita) b = Properties.Resources.star;
                 Menu_portas.Items.Add(port, b, ConectarCORE);
             }
         }
@@ -373,15 +371,10 @@ namespace LCDHM {
             IconeNotificacao.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
         }
         private void Menu_Desconectar_Click(object sender, EventArgs e) => DesconectarCORE();
+
         private void Menu_Configurar_Click(object sender, EventArgs e) {
             Mostrar_Configuracoes();
         }
-
-        //TODO: Mudar Cor do Item selecionado
-        private void MouseEnter_MenuContexto(object sender, EventArgs e) {
-            ((ToolStripMenuItem)sender).BackColor = Color.Red;
-        }
-
         private void Menu_Sobre_Click(object sender, EventArgs e) => new SobreForm().Show();
         private void Menu_Sair_Click(object sender, EventArgs e) {
             DesconectarCORE();
@@ -396,7 +389,7 @@ namespace LCDHM {
         }
         private void Ocultar_Configuracoes() {
             this.Location = new Point(-10000, -10000);
-            this.Hide();
+            Hide();
             this.Opacity = 0;
             this.ShowInTaskbar = false;
         }

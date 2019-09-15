@@ -75,8 +75,7 @@
     <StartupObject>LCDHM.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\Icone_LCDHM.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>B0A230794ED68510A85AF41BC398076363938C4C</ManifestCertificateThumbprint>
@@ -155,7 +154,7 @@
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -225,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LOGO.bmp" />
+    <None Include="Resources\Icone_LCDHM.ico" />
     <Content Include="Resources\star.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
