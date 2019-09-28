@@ -49,13 +49,13 @@ namespace LCDHM.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COM1")]
-        public string COM_Favorita {
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.2")]
+        public string IP_Favorito {
             get {
-                return ((string)(this["COM_Favorita"]));
+                return ((string)(this["IP_Favorito"]));
             }
             set {
-                this["COM_Favorita"] = value;
+                this["IP_Favorito"] = value;
             }
         }
     }

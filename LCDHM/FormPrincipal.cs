@@ -2,17 +2,18 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO.Ports;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace LCDHM {
     public partial class FormPrincipal : Form {
-        private bool
-                Conectado = false;
-
         private int
                 PAGINA = 0,
+                IPLocalLenght,
                 ANALISE_LINHA = 0,
                 ANALISE_MIN_FPS = 60,
                 FPS_MIN = 0,
@@ -24,7 +25,10 @@ namespace LCDHM {
                 NET_INDEX = 1,
                 CORE_BOOST = 0,
                 MEM_BOOST = 0,
-                FAN_BOOST = 30,
+                FAN_BOOST = 30;
+
+        private readonly int
+                TCP_PORTA = 1199,
                 FAN_SENSIBILIDADE = 5,
                 CLOCK_SENSIBILIDADE = 25;
 
@@ -37,26 +41,38 @@ namespace LCDHM {
         private HardwareMonitor
                 HM;
 
-        public FormPrincipal() {
-            InitializeComponent();
-            AtualizarPortas();
-        }
+        private TcpClient
+                Cliente;
+
+        private String
+                IPLocal;
+
+
+        public FormPrincipal() => InitializeComponent();
+
         private void Form1_Load(object sender, EventArgs e) {
             Ocultar_Configuracoes();
             Properties.Settings.Default.Reload();
             Text_MSI_Diretorio.Text = Properties.Settings.Default.MSI_Directory;
             Text_Steam_Diretorio.Text = Properties.Settings.Default.Steam_Directory;
             if (!(Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe"))) Mostrar_Configuracoes();
+            AtualizarIPLocal();
 
         }
 
-        private void Serial_Recebeu(object sender, SerialDataReceivedEventArgs e) {
-            if (Conectado) {
-                String entrada = serial.ReadLine();
-                entrada = entrada.Substring(0, entrada.Length - 1);
+        private void AtualizarIPLocal() {
+            IPLocal = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First().ToString();
+            String IPFormatado = IPLocal.Split('.')[0] + "." + IPLocal.Split('.')[1] + "." + IPLocal.Split('.')[2] + ".";
+            Menu_IP.Text = IPFormatado;
+            IPLocalLenght = IPFormatado.Length;
+        }
+
+        private void SerialRecebeu() {
+            if (Cliente.Connected) {
+                String entrada = TCPReadLine();
                 Console.WriteLine(entrada);
                 if (entrada.Contains("init")) ConectarMSI();
-                if (entrada.Contains("MENU")) MudarPagina(0);
+                if (entrada.Contains("MENU") || entrada.Contains("p0")) MudarPagina(0);
                 if (entrada.Contains("p1")) MudarPagina(1);
                 if (entrada.Contains("p2")) { AtualizarClocks(); MudarPagina(2); }
                 if (entrada.Contains("p3")) MudarPagina(3);
@@ -69,7 +85,7 @@ namespace LCDHM {
                 if (entrada.Contains("analise_auto")) ANALISE_MIN_FPS = Convert.ToInt32(entrada.Replace("analise_auto", ""));
                 if (entrada.Contains("fps_reset")) { FPS_MAX = 0; FPS_MIN = 0; Enviar("GPU.t6", "-"); Enviar("GPU.t7", "-"); }
                 if (entrada.Contains("core_min") && CORE_BOOST > -200) { CORE_BOOST -= CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tcore", Color.Red); }
-                if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += CLOCK_SENSIBILIDADE; AtualizarClocks(); Console.WriteLine(CM.GpuEntries[0].CoreClockBoostCur); Enviar("Overclock.tcore", Color.Red); }
+                if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tcore", Color.Red); }
                 if (entrada.Contains("core_rst")) { CORE_BOOST = 0; AtualizarClocks(); Enviar("Overclock.tcore", Color.Red); }
                 if (entrada.Contains("mem_min") && MEM_BOOST > -200) { MEM_BOOST -= CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tmem", Color.Red); }
                 if (entrada.Contains("mem_max") && MEM_BOOST < 200) { MEM_BOOST += CLOCK_SENSIBILIDADE; AtualizarClocks(); Enviar("Overclock.tmem", Color.Red); }
@@ -85,7 +101,6 @@ namespace LCDHM {
                     Enviar("Overclock.tcore", Color.FromArgb(255, 0, 184, 192));
                     Enviar("Overclock.tmem", Color.FromArgb(255, 0, 184, 192));
                     Enviar("Overclock.tfan", Color.FromArgb(255, 0, 184, 192));
-
                     CM.CommitChanges();
                     AtualizarClocks();
                 }
@@ -98,7 +113,6 @@ namespace LCDHM {
 
                 //TODO: Não funciona.
                 if (entrada.Contains("delay")) {
-                    Console.WriteLine(timer.Interval);
                     timer.Stop();
                     timer.Enabled = false;
                     timer.Interval = Convert.ToInt32(entrada.Replace("delay", ""));
@@ -114,12 +128,16 @@ namespace LCDHM {
 
             }
         }
+
         private void MudarPagina(int PG_Index) {
             PAGINA = PG_Index;
-            Enviar_Automatico();
+            EnviarAutomatico();
         }
-        private void TimerTick(object sender, EventArgs e) => Enviar_Automatico();
-        private void Enviar_Automatico() {
+        private void TimerTick(object sender, EventArgs e) {
+            if (Cliente.Connected && Cliente.GetStream().DataAvailable) SerialRecebeu();
+            EnviarAutomatico();
+        }
+        private void EnviarAutomatico() {
             int fps;
             switch (PAGINA) {
                 default:
@@ -244,40 +262,53 @@ namespace LCDHM {
             }
         }
 
-        private void ConectarCORE(object sender, EventArgs e) {
-            serial.PortName = ((ToolStripItem)sender).Text;
-            serial.Open();
-            serial.DiscardInBuffer();
-            serial.DiscardOutBuffer();
-            Thread.Sleep(1000);
-            serial.WriteLine("INIT");
-            Thread.Sleep(1000);
-            if (serial.BytesToRead > 0 && serial.ReadLine().Contains("Conectar")) {
-                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado a porta " + ((ToolStripItem)sender).Text, ToolTipIcon.Info);
-                Conectado = true;
-                menu_Conectar.Visible = false;
-                menu_Atualizar.Visible = false;
-                menu_Desconectar.Visible = true;
-                serial.WriteLine("page 0");
-                Properties.Settings.Default.COM_Favorita = serial.PortName;
-                Properties.Settings.Default.Save();
-                timer.Start();
-            } else {
-                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar.", ToolTipIcon.Error);
-                serial.Close();
+        private void TCPPrintLine(String MensagemTCP) {
+            if (Cliente.Connected) {
+                if (!MensagemTCP.EndsWith("\n")) MensagemTCP += '\n';
+                Byte[] MensagemTCPByte = Encoding.ASCII.GetBytes(MensagemTCP);
+                Cliente.GetStream().Write(MensagemTCPByte, 0, MensagemTCPByte.Length);
             }
         }
-        private void DesconectarCORE() {
-            if (Conectado) {
+        private String TCPReadLine() {
+            String LinhaLida = "";
+            while (Cliente.Connected && Cliente.GetStream().DataAvailable) {
+                int b = Cliente.GetStream().ReadByte();
+                if (b == -1 || b == '\n') break;
+                LinhaLida += (char)b;
+            }
+
+            return LinhaLida;
+        }
+        private void ConectarTCP(String IP) {
+            try {
+                Cliente = new TcpClient();
+                if (Cliente.ConnectAsync(IP, TCP_PORTA).Wait(1000)) {
+                    menu_Conectar.Visible = false;
+                    menu_Atualizar.Visible = false;
+                    menu_Desconectar.Visible = true;
+                    TCPPrintLine("page 0");
+                    Properties.Settings.Default.IP_Favorito = IP;
+                    Properties.Settings.Default.Save();
+                    IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado", ToolTipIcon.Info);
+                    timer.Start();
+                } else {
+                    IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar a " + IP + ":" + TCP_PORTA, ToolTipIcon.Error);
+                }
+            } catch (Exception ex) {
+                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", ex.Message, ToolTipIcon.Error);
+            }
+        }
+
+        private void DesconectarTCP() {
+            if (Cliente.Connected) {
                 Enviar("page 0");
                 timer.Stop();
-                Conectado = false;
                 menu_Conectar.Visible = true;
                 menu_Atualizar.Visible = true;
                 menu_Desconectar.Visible = false;
                 if (HM != null) HM.Disconnect();
                 if (CM != null) CM.Disconnect();
-                serial.Close();
+                Cliente.Close();
                 IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
             }
         }
@@ -317,10 +348,8 @@ namespace LCDHM {
                 }
             }
 
-
             Enviar("j0", 50);
             Enviar("t", "Definindo Constantes");
-
             CPU_THREADS = Environment.ProcessorCount;
             CPU_CORES = 0;
             System.Management.ManagementObjectSearcher managementObjectSearcher = new System.Management.ManagementObjectSearcher("Select * from Win32_Processor");
@@ -332,7 +361,6 @@ namespace LCDHM {
             Enviar("j0", 70);
             Enviar("t", "Definindo Clocks");
             FAN_BOOST = int.Parse(CM.GpuEntries[0].FanSpeedCur.ToString("N0"));
-
 
             Enviar("j0", 100);
             Enviar("t", "Conectado");
@@ -354,30 +382,44 @@ namespace LCDHM {
             Enviar("Overclock.tcore", (GetEntidade("Core clock").Data + CM.GpuEntries[0].CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (CORE_BOOST >= 0 ? "+" : "") + CORE_BOOST + ")");
             Enviar("Overclock.tmem", (GetEntidade("Memory clock").Data + CM.GpuEntries[0].MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (MEM_BOOST >= 0 ? "+" : "") + MEM_BOOST + ")");
             Enviar("Overclock.tfan", FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO ? "AUTO" : FAN_BOOST.ToString());
-
-
-        }
-        private void AtualizarPortas() {
-            Menu_portas.Items.Clear();
-            foreach (String port in SerialPort.GetPortNames()) {
-                Bitmap b = null;
-                if (port == Properties.Settings.Default.COM_Favorita) b = Properties.Resources.star;
-                Menu_portas.Items.Add(port, b, ConectarCORE);
-            }
         }
 
         private void Menu_Atualizar_Click(object sender, EventArgs e) {
-            AtualizarPortas();
-            IconeNotificacao.ShowBalloonTip(1000, "LCDHM", SerialPort.GetPortNames().Length + " porta(s) encontradas.", ToolTipIcon.Info);
         }
-        private void Menu_Desconectar_Click(object sender, EventArgs e) => DesconectarCORE();
+        private void Menu_Conectar_Click(object sender, EventArgs e) {
+            MenuContexto.Hide();
+            Properties.Settings.Default.Reload();
+            String IP = Properties.Settings.Default.IP_Favorito;
+            IPAddress RealIP;
+            if (IPAddress.TryParse(IP, out RealIP)) ConectarTCP(IP);
 
-        private void Menu_Configurar_Click(object sender, EventArgs e) {
-            Mostrar_Configuracoes();
         }
+        private void Menu_IP_EnterClick(object sender, KeyEventArgs e) {
+            IPAddress RealIP;
+            if (e.KeyCode == Keys.Enter && IPAddress.TryParse(Menu_IP.Text, out RealIP)) {
+                MenuContexto.Hide();
+                ConectarTCP(Menu_IP.Text);
+
+            }
+
+        }
+        private void Menu_IP_TextChanged(object sender, EventArgs e) {
+            if (!Menu_IP.Text.StartsWith(IPLocal.Substring(0, IPLocal.Length - 3))) {
+                Menu_IP.Text = IPLocal.Substring(0, IPLocal.Length - 3);
+            }
+            String IP = Menu_IP.Text;
+            IPAddress RealIP;
+            if (IPAddress.TryParse(IP, out RealIP)) {
+                Menu_IP.ForeColor = Color.FromArgb(255, 0, 184, 192);
+            } else {
+                Menu_IP.ForeColor = Color.FromArgb(255, 100, 0, 0);
+            }
+        }
+        private void Menu_Desconectar_Click(object sender, EventArgs e) => DesconectarTCP();
+        private void Menu_Configurar_Click(object sender, EventArgs e) => Mostrar_Configuracoes();
         private void Menu_Sobre_Click(object sender, EventArgs e) => new SobreForm().Show();
         private void Menu_Sair_Click(object sender, EventArgs e) {
-            DesconectarCORE();
+            DesconectarTCP();
             Application.Exit();
         }
 
@@ -410,10 +452,12 @@ namespace LCDHM {
             if (FileDialog.ShowDialog().ToString() == "OK") Text_MSI_Diretorio.Text = FileDialog.FileName;
         }
 
-        public void Enviar(String Comando) => serial.WriteLine(Comando);
-        public void Enviar(String Variavel, String Texto) => serial.WriteLine(Variavel + ".txt=\"" + Texto + "\"");
-        public void Enviar(String Variavel, int Valor) => serial.WriteLine(Variavel + ".val=" + Valor);
-        public void Enviar(String Variavel, int Chanel, int Valor, int In_min, int In_max, int Out_min, int Out_max) => serial.WriteLine("add " + Variavel + ".id" + "," + Chanel.ToString() + "," + ((Valor - In_min) * (Out_max - Out_min) / (In_max - In_min) + Out_min).ToString("N0"));
-        public void Enviar(String Variavel, Color c) => serial.WriteLine(Variavel + ".pco=" + (((c.R >> 3) << 11) + ((c.G >> 2) << 5) + (c.B >> 3)).ToString("N0").Replace(".", ""));
+        public void Enviar(String Comando) => TCPPrintLine(Comando);
+        public void Enviar(String Variavel, String Texto) => TCPPrintLine(Variavel + ".txt=\"" + Texto + "\"");
+        public void Enviar(String Variavel, int Valor) => TCPPrintLine(Variavel + ".val=" + Valor);
+        public void Enviar(String Variavel, int Chanel, int Valor, int In_min, int In_max, int Out_min, int Out_max) => TCPPrintLine("add " + Variavel + ".id" + "," + Chanel.ToString() + "," + ((Valor - In_min) * (Out_max - Out_min) / (In_max - In_min) + Out_min).ToString("N0"));
+        public void Enviar(String Variavel, Color c) => TCPPrintLine(Variavel + ".pco=" + (((c.R >> 3) << 11) + ((c.G >> 2) << 5) + (c.B >> 3)).ToString("N0").Replace(".", ""));
     }
 }
+
+//TODO: Mudar o enviar Page 0 para outra page, jaque esta será a de conexao com roteador

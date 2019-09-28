@@ -29,6 +29,7 @@
             this.MenuContexto = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu_portas = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Menu_IP = new System.Windows.Forms.ToolStripTextBox();
             this.menu_Desconectar = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_Atualizar = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -44,8 +45,8 @@
             this.BT_Buscar_Steam = new System.Windows.Forms.Button();
             this.Text_Steam_Diretorio = new System.Windows.Forms.TextBox();
             this.BT_Aplicar = new System.Windows.Forms.Button();
-            this.serial = new System.IO.Ports.SerialPort(this.components);
             this.MenuContexto.SuspendLayout();
+            this.Menu_portas.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -85,15 +86,33 @@
             this.menu_Conectar.Name = "menu_Conectar";
             this.menu_Conectar.Size = new System.Drawing.Size(158, 26);
             this.menu_Conectar.Text = "Conectar";
+            this.menu_Conectar.Click += new System.EventHandler(this.Menu_Conectar_Click);
             // 
             // Menu_portas
             // 
             this.Menu_portas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.Menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Menu_portas.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Menu_IP});
             this.Menu_portas.Name = "menu";
             this.Menu_portas.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.Menu_portas.Size = new System.Drawing.Size(61, 4);
+            this.Menu_portas.Size = new System.Drawing.Size(181, 50);
+            // 
+            // Menu_IP
+            // 
+            this.Menu_IP.AutoCompleteCustomSource.AddRange(new string[] {
+            "192.168.0.XXX"});
+            this.Menu_IP.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Menu_IP.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.Menu_IP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Menu_IP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Menu_IP.Font = new System.Drawing.Font("Tw Cen MT", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Menu_IP.ForeColor = System.Drawing.SystemColors.ScrollBar;
+            this.Menu_IP.Name = "Menu_IP";
+            this.Menu_IP.Size = new System.Drawing.Size(100, 22);
+            this.Menu_IP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Menu_IP_EnterClick);
+            this.Menu_IP.TextChanged += new System.EventHandler(this.Menu_IP_TextChanged);
             // 
             // menu_Desconectar
             // 
@@ -150,7 +169,7 @@
             // 
             // timer
             // 
-            this.timer.Interval = 1000;
+            this.timer.Interval = 800;
             this.timer.Tick += new System.EventHandler(this.TimerTick);
             // 
             // Text_MSI_Diretorio
@@ -240,23 +259,18 @@
             this.BT_Aplicar.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.BT_Aplicar.Location = new System.Drawing.Point(12, 160);
             this.BT_Aplicar.Name = "BT_Aplicar";
-            this.BT_Aplicar.Size = new System.Drawing.Size(680, 30);
+            this.BT_Aplicar.Size = new System.Drawing.Size(680, 33);
             this.BT_Aplicar.TabIndex = 5;
             this.BT_Aplicar.Text = "Aplicar";
             this.BT_Aplicar.UseVisualStyleBackColor = false;
             this.BT_Aplicar.Click += new System.EventHandler(this.BT_Aplicar_Click);
-            // 
-            // serial
-            // 
-            this.serial.BaudRate = 115200;
-            this.serial.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.Serial_Recebeu);
             // 
             // FormPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(704, 200);
+            this.ClientSize = new System.Drawing.Size(704, 207);
             this.Controls.Add(this.BT_Aplicar);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -268,6 +282,8 @@
             this.Text = "LCDHM";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MenuContexto.ResumeLayout(false);
+            this.Menu_portas.ResumeLayout(false);
+            this.Menu_portas.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -296,7 +312,7 @@
         private System.Windows.Forms.TextBox Text_Steam_Diretorio;
         private System.Windows.Forms.Button BT_Aplicar;
         private System.Windows.Forms.ToolStripMenuItem menu_Configurar;
-        private System.IO.Ports.SerialPort serial;
+        private System.Windows.Forms.ToolStripTextBox Menu_IP;
     }
 }
 

@@ -8,8 +8,8 @@
     <Setting Name="MSI_Directory" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\</Value>
     </Setting>
-    <Setting Name="COM_Favorita" Type="System.String" Scope="User">
-      <Value Profile="(Default)">COM1</Value>
+    <Setting Name="IP_Favorito" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.2</Value>
     </Setting>
   </Settings>
 </SettingsFile>
