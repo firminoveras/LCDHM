@@ -28,10 +28,9 @@
             this.IconeNotificacao = new System.Windows.Forms.NotifyIcon(this.components);
             this.MenuContexto = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_Conectar = new System.Windows.Forms.ToolStripMenuItem();
-            this.Menu_portas = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuIPs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Menu_IP = new System.Windows.Forms.ToolStripTextBox();
             this.menu_Desconectar = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_Atualizar = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_Configurar = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_Sobre = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,7 +45,7 @@
             this.Text_Steam_Diretorio = new System.Windows.Forms.TextBox();
             this.BT_Aplicar = new System.Windows.Forms.Button();
             this.MenuContexto.SuspendLayout();
-            this.Menu_portas.SuspendLayout();
+            this.MenuIPs.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +66,6 @@
             this.MenuContexto.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_Conectar,
             this.menu_Desconectar,
-            this.menu_Atualizar,
             this.toolStripSeparator1,
             this.menu_Configurar,
             this.menu_Sobre,
@@ -75,29 +73,31 @@
             this.MenuContexto.Name = "menu";
             this.MenuContexto.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.MenuContexto.ShowItemToolTips = false;
-            this.MenuContexto.Size = new System.Drawing.Size(159, 166);
+            this.MenuContexto.Size = new System.Drawing.Size(185, 162);
             // 
             // menu_Conectar
             // 
-            this.menu_Conectar.DropDown = this.Menu_portas;
+            this.menu_Conectar.DropDown = this.MenuIPs;
             this.menu_Conectar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Conectar.Image = global::LCDHM.Properties.Resources.link;
             this.menu_Conectar.Name = "menu_Conectar";
-            this.menu_Conectar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Conectar.Size = new System.Drawing.Size(184, 26);
             this.menu_Conectar.Text = "Conectar";
             this.menu_Conectar.Click += new System.EventHandler(this.Menu_Conectar_Click);
             // 
-            // Menu_portas
+            // MenuIPs
             // 
-            this.Menu_portas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.Menu_portas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Menu_portas.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Menu_portas.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuIPs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.MenuIPs.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MenuIPs.Font = new System.Drawing.Font("Tw Cen MT", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MenuIPs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Menu_IP});
-            this.Menu_portas.Name = "menu";
-            this.Menu_portas.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.Menu_portas.Size = new System.Drawing.Size(181, 50);
+            this.MenuIPs.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.MenuIPs.Name = "menu";
+            this.MenuIPs.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.MenuIPs.ShowImageMargin = false;
+            this.MenuIPs.Size = new System.Drawing.Size(136, 28);
             // 
             // Menu_IP
             // 
@@ -119,32 +119,22 @@
             this.menu_Desconectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Desconectar.Image = global::LCDHM.Properties.Resources.broken_link;
             this.menu_Desconectar.Name = "menu_Desconectar";
-            this.menu_Desconectar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Desconectar.Size = new System.Drawing.Size(184, 26);
             this.menu_Desconectar.Text = "Desconectar";
             this.menu_Desconectar.Visible = false;
             this.menu_Desconectar.Click += new System.EventHandler(this.Menu_Desconectar_Click);
             // 
-            // menu_Atualizar
-            // 
-            this.menu_Atualizar.Font = new System.Drawing.Font("Tw Cen MT", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_Atualizar.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.menu_Atualizar.Image = global::LCDHM.Properties.Resources.repeat;
-            this.menu_Atualizar.Name = "menu_Atualizar";
-            this.menu_Atualizar.Size = new System.Drawing.Size(158, 26);
-            this.menu_Atualizar.Text = "Atualizar";
-            this.menu_Atualizar.Click += new System.EventHandler(this.Menu_Atualizar_Click);
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
             // menu_Configurar
             // 
             this.menu_Configurar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Configurar.Image = global::LCDHM.Properties.Resources.settings_6;
             this.menu_Configurar.Name = "menu_Configurar";
-            this.menu_Configurar.Size = new System.Drawing.Size(158, 26);
+            this.menu_Configurar.Size = new System.Drawing.Size(184, 26);
             this.menu_Configurar.Text = "Configurar";
             this.menu_Configurar.Click += new System.EventHandler(this.Menu_Configurar_Click);
             // 
@@ -153,7 +143,7 @@
             this.menu_Sobre.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Sobre.Image = global::LCDHM.Properties.Resources.info;
             this.menu_Sobre.Name = "menu_Sobre";
-            this.menu_Sobre.Size = new System.Drawing.Size(158, 26);
+            this.menu_Sobre.Size = new System.Drawing.Size(184, 26);
             this.menu_Sobre.Text = "Sobre";
             this.menu_Sobre.Click += new System.EventHandler(this.Menu_Sobre_Click);
             // 
@@ -163,7 +153,7 @@
             this.menu_Sair.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Sair.Image = global::LCDHM.Properties.Resources.error;
             this.menu_Sair.Name = "menu_Sair";
-            this.menu_Sair.Size = new System.Drawing.Size(158, 26);
+            this.menu_Sair.Size = new System.Drawing.Size(184, 26);
             this.menu_Sair.Text = "Sair";
             this.menu_Sair.Click += new System.EventHandler(this.Menu_Sair_Click);
             // 
@@ -282,8 +272,8 @@
             this.Text = "LCDHM";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MenuContexto.ResumeLayout(false);
-            this.Menu_portas.ResumeLayout(false);
-            this.Menu_portas.PerformLayout();
+            this.MenuIPs.ResumeLayout(false);
+            this.MenuIPs.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -296,11 +286,10 @@
         private System.Windows.Forms.NotifyIcon IconeNotificacao;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ContextMenuStrip MenuContexto;
-        private System.Windows.Forms.ToolStripMenuItem menu_Atualizar;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menu_Sair;
         private System.Windows.Forms.ToolStripMenuItem menu_Conectar;
-        private System.Windows.Forms.ContextMenuStrip Menu_portas;
+        private System.Windows.Forms.ContextMenuStrip MenuIPs;
         private System.Windows.Forms.ToolStripMenuItem menu_Desconectar;
         private System.Windows.Forms.ToolStripMenuItem menu_Sobre;
         private System.Windows.Forms.TextBox Text_MSI_Diretorio;

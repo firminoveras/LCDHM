@@ -284,7 +284,6 @@ namespace LCDHM {
                 Cliente = new TcpClient();
                 if (Cliente.ConnectAsync(IP, TCP_PORTA).Wait(1000)) {
                     menu_Conectar.Visible = false;
-                    menu_Atualizar.Visible = false;
                     menu_Desconectar.Visible = true;
                     TCPPrintLine("page 0");
                     Properties.Settings.Default.IP_Favorito = IP;
@@ -304,7 +303,6 @@ namespace LCDHM {
                 Enviar("page 0");
                 timer.Stop();
                 menu_Conectar.Visible = true;
-                menu_Atualizar.Visible = true;
                 menu_Desconectar.Visible = false;
                 if (HM != null) HM.Disconnect();
                 if (CM != null) CM.Disconnect();
@@ -384,8 +382,7 @@ namespace LCDHM {
             Enviar("Overclock.tfan", FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO ? "AUTO" : FAN_BOOST.ToString());
         }
 
-        private void Menu_Atualizar_Click(object sender, EventArgs e) {
-        }
+        
         private void Menu_Conectar_Click(object sender, EventArgs e) {
             MenuContexto.Hide();
             Properties.Settings.Default.Reload();
@@ -424,16 +421,18 @@ namespace LCDHM {
         }
 
         private void Mostrar_Configuracoes() {
+            Enabled = true;
             CenterToScreen();
             this.Show();
             this.Opacity = 100;
             this.ShowInTaskbar = true;
         }
         private void Ocultar_Configuracoes() {
-            this.Location = new Point(-10000, -10000);
+            this.Location = new Point(-10000, -10000);            
             Hide();
             this.Opacity = 0;
             this.ShowInTaskbar = false;
+            Enabled = false;
         }
         private void BT_Buscar_Steam_Click(object sender, EventArgs e) {
             if (FileDialog.ShowDialog().ToString() == "OK") Text_Steam_Diretorio.Text = FileDialog.FileName;

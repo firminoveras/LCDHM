@@ -19,5 +19,6 @@ namespace LCDHM {
             Close();
             Dispose();
         }
+
     }
 }
