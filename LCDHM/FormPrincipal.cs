@@ -291,7 +291,7 @@ namespace LCDHM {
             }
         }
         private void TCP_Desconectar() {
-            if (Cliente.Connected) {
+            if (Cliente != null && Cliente.Connected) {
                 timer.Stop();
                 TCP_Listener.Stop();
                 menu_Conectar.Visible = true;
@@ -407,7 +407,7 @@ namespace LCDHM {
         private void Menu_Sobre_Click(object sender, EventArgs e) => new SobreForm().Show();
         private void Menu_Sair_Click(object sender, EventArgs e) {
             TCP_Desconectar();
-            Application.Exit();
+            Application.Exit();            
         }
 
         private void Mostrar_Configuracoes() {
