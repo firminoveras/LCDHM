@@ -62,13 +62,15 @@ namespace LCDHM {
             String IPFormatado = IPLocal.Split('.')[0] + "." + IPLocal.Split('.')[1] + "." + IPLocal.Split('.')[2] + ".";
             Menu_IP.Text = IPFormatado;
         }
-        
+
         private void TCP_Listener_Tick(object sender, EventArgs e) {
             if (Cliente.Connected && Cliente.GetStream().DataAvailable) {
                 String entrada = TCP_ReadLine();
                 if (entrada.Length > 1) {
                     Console.WriteLine(entrada);
                     if (entrada.Contains("init")) MSI_Conectar();
+                    if (entrada.Contains("desconectar")) TCP_Desconectar();
+
                     if (entrada.Contains("MENU") || entrada.Contains("p0")) MudarPagina(0);
                     if (entrada.Contains("p1")) MudarPagina(1);
                     if (entrada.Contains("p2")) { MSI_AtualizarClock(); MudarPagina(2); }
@@ -128,7 +130,7 @@ namespace LCDHM {
         private void MudarPagina(int PG_Index) {
             PAGINA = PG_Index;
             TCP_EnviarAutomatico();
-        }        
+        }
         private void TCP_EnviarAutomatico() {
             int fps;
             switch (PAGINA) {
@@ -255,18 +257,28 @@ namespace LCDHM {
         }
 
         private void TCP_WriteLine(String MensagemTCP) {
-            if (Cliente.Connected) {
-                if (!MensagemTCP.EndsWith("\n")) MensagemTCP += '\n';
-                Byte[] MensagemTCPByte = Encoding.ASCII.GetBytes(MensagemTCP);
-                Cliente.GetStream().Write(MensagemTCPByte, 0, MensagemTCPByte.Length);
+            try {
+                if (Cliente.Connected) {
+                    if (!MensagemTCP.EndsWith("\n")) MensagemTCP += '\n';
+                    Byte[] MensagemTCPByte = Encoding.ASCII.GetBytes(MensagemTCP);
+                    Cliente.GetStream().Write(MensagemTCPByte, 0, MensagemTCPByte.Length);
+                }
+            } catch (Exception ex) {
+                TCP_Desconectar();
+                IconeNotificacao.ShowBalloonTip(100, "LCDHM - Erro de Conexão", ex.Message, ToolTipIcon.Error);
             }
         }
         private String TCP_ReadLine() {
             String LinhaLida = "";
-            while (Cliente.Connected && Cliente.GetStream().DataAvailable) {
-                int b = Cliente.GetStream().ReadByte();
-                if ((char)b == '\n' || (char)b == 13) break;
-                LinhaLida += (char)b;
+            try {
+                while (Cliente.Connected && Cliente.GetStream().DataAvailable) {
+                    int b = Cliente.GetStream().ReadByte();
+                    if ((char)b == '\n' || (char)b == 13) break;
+                    LinhaLida += (char)b;
+                }
+            } catch (Exception ex) {
+                TCP_Desconectar();
+                IconeNotificacao.ShowBalloonTip(100, "LCDHM - Erro de Conexão", ex.Message, ToolTipIcon.Error);
             }
             return LinhaLida;
         }
@@ -278,6 +290,8 @@ namespace LCDHM {
                     menu_Desconectar.Visible = true;
                     Properties.Settings.Default.IP_Favorito = IP;
                     Properties.Settings.Default.Save();
+                    Cliente.ReceiveTimeout = 2000;
+                    Cliente.SendTimeout = 2000;
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado", ToolTipIcon.Info);
                     TCP_Listener.Start();
                     timer.Start();
@@ -291,17 +305,16 @@ namespace LCDHM {
             }
         }
         private void TCP_Desconectar() {
-            if (Cliente != null && Cliente.Connected) {
-                timer.Stop();
-                TCP_Listener.Stop();
-                menu_Conectar.Visible = true;
-                menu_Desconectar.Visible = false;
-                if (HM != null) HM.Disconnect();
-                if (CM != null) CM.Disconnect();
-                Cliente.Close();
-                Cliente.Dispose();
-                IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
-            }
+            timer.Stop();
+            TCP_Listener.Stop();
+            menu_Conectar.Visible = true;
+            menu_Desconectar.Visible = false;
+            if (HM != null) HM.Disconnect();
+            if (CM != null) CM.Disconnect();
+            if (Cliente != null && Cliente.Connected) Cliente.Close();
+            if (Cliente != null && Cliente.Connected) Cliente.Dispose();
+            IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
+
         }
 
         private void MSI_Conectar() {
@@ -367,10 +380,12 @@ namespace LCDHM {
             TCP_Enviar("Overclock.tfan", FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO ? "AUTO" : FAN_BOOST.ToString());
         }
         private HardwareMonitorEntry GetMSIEntidade(String nome) {
-            foreach (HardwareMonitorEntry e in HM.Entries) {
-                if (e.SrcName.Equals(nome)) {
-                    HM.ReloadEntry(e);
-                    return e;
+            if (HM != null) {
+                foreach (HardwareMonitorEntry e in HM.Entries) {
+                    if (e.SrcName.Equals(nome)) {
+                        HM.ReloadEntry(e);
+                        return e;
+                    }
                 }
             }
             return new HardwareMonitorEntry();
@@ -407,7 +422,7 @@ namespace LCDHM {
         private void Menu_Sobre_Click(object sender, EventArgs e) => new SobreForm().Show();
         private void Menu_Sair_Click(object sender, EventArgs e) {
             TCP_Desconectar();
-            Application.Exit();            
+            Application.Exit();
         }
 
         private void Mostrar_Configuracoes() {
