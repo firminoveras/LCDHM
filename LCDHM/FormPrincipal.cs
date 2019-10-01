@@ -70,7 +70,6 @@ namespace LCDHM {
                     Console.WriteLine(entrada);
                     if (entrada.Contains("init")) MSI_Conectar();
                     if (entrada.Contains("desconectar")) TCP_Desconectar();
-
                     if (entrada.Contains("MENU") || entrada.Contains("p0")) MudarPagina(0);
                     if (entrada.Contains("p1")) MudarPagina(1);
                     if (entrada.Contains("p2")) { MSI_AtualizarClock(); MudarPagina(2); }
@@ -109,7 +108,6 @@ namespace LCDHM {
                     if (entrada.Contains("NET_max")) if (NET_INDEX < 9) NET_INDEX++; else NET_INDEX = 1;
                     if (entrada.Contains("NET_min")) if (NET_INDEX > 1) NET_INDEX--; else NET_INDEX = 9;
                     if (entrada.Contains("Steam")) try { Process.Start(Properties.Settings.Default.Steam_Directory); } catch (Exception) { Mostrar_Configuracoes(); }
-
                     //TODO: Não funciona.
                     if (entrada.Contains("delay")) {
                         timer.Stop();
