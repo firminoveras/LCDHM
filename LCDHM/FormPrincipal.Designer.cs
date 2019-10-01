@@ -162,7 +162,7 @@
             // timer
             // 
             this.timer.Interval = 800;
-            this.timer.Tick += new System.EventHandler(this.TimerTick);
+            this.timer.Tick += new System.EventHandler(this.MSI_EnviarTimer);
             // 
             // Text_MSI_Diretorio
             // 
@@ -203,7 +203,6 @@
             // 
             // FileDialog
             // 
-            this.FileDialog.FileName = "FileDialog";
             this.FileDialog.Filter = "Programa|*.exe";
             // 
             // groupBox2
