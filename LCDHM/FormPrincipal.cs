@@ -397,19 +397,18 @@ namespace LCDHM {
 
         }
         private void Menu_IP_EnterClick(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter && IPAddress.TryParse(Menu_IP.Text, out _)) {
+            int pontos = 0;
+            foreach (char c in Menu_IP.Text) if (c == '.') pontos++;
+            if (e.KeyCode == Keys.Enter && IPAddress.TryParse(Menu_IP.Text, out _) && pontos > 2) {
                 MenuContexto.Hide();
                 TCP_Conectar(Menu_IP.Text);
-
             }
-
         }
         private void Menu_IP_TextChanged(object sender, EventArgs e) {
-            if (!Menu_IP.Text.StartsWith(IPLocal.Substring(0, IPLocal.Length - 3))) {
-                Menu_IP.Text = IPLocal.Substring(0, IPLocal.Length - 3);
-            }
             String IP = Menu_IP.Text;
-            if (IPAddress.TryParse(IP, out _)) {
+            int pontos = 0;
+            foreach (char c in IP) if (c == '.') pontos++;
+            if (IPAddress.TryParse(IP, out _) && pontos > 2) {
                 Menu_IP.ForeColor = Color.FromArgb(255, 0, 184, 192);
             } else {
                 Menu_IP.ForeColor = Color.FromArgb(255, 100, 0, 0);

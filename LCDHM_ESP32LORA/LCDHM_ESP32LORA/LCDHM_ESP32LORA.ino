@@ -25,15 +25,22 @@ WiFiClient Cliente;
 
 void setup(){
 	Heltec.begin(true, false, true);
-	WriteNextion("page 0");
+	attachInterrupt(digitalPinToInterrupt(0), BT, FALLING);
 	Serial.setTimeout(SERIAL_TIMEOUT);
-	if(getEEPROM_AUTOCONNECT())ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS()); else Status();
+	Status();
 }
+
 void loop(){
 	if(Serial.available() > 0){
 		String entrada = Serial.readStringUntil(':');
 		if(entrada.startsWith("conectar")){
-			if(Serial.available() > 0) ConectarWIFI(Serial.readStringUntil(':'), Serial.readStringUntil(':')); else ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS());
+			if(Serial.available() > 0){
+				String SSID = Serial.readStringUntil(':');
+				if(SSID.equals(getEEPROM_SSID())) ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS()); else ConectarWIFI(SSID, Serial.readStringUntil(':'));
+
+			} else{
+				ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS());
+			}
 		} else if(entrada.startsWith("scan")) ScanWIFI();
 		else if(entrada.startsWith("autoconectar")) setEEPROM_AUTOCONNECT(Serial.readStringUntil(':').startsWith("true"));
 		else if(entrada.startsWith("desconectar")) DesconectarWIFI();
@@ -46,14 +53,15 @@ void loop(){
 			BytesOut = 0;
 			ClienteChanged = false;
 			WriteNextion("page CONNECT");
+			Status();
 		}
 		if(Servidor.hasClient()){
 			ClienteChanged = true;
 			Cliente = Servidor.available();
 			while(!Cliente.connected());
 			EnviarTCP("init");
+			Status();
 		}
-		Status();
 	}
 }
 
@@ -105,29 +113,31 @@ void Status(){
 	Heltec.display->display();
 }
 void ScanWIFI(){
-	if(WiFi.isConnected()){
-		WriteNextion("page CONNECT");
-	} else{
-		for(int i = 0; i <= 5; i++){
-			WriteNextion("s" + String(i) + ".pic=22");
-			WriteNextion("t" + String(i) + ".txt=\"\"");
-			WriteNextion("p" + String(i) + ".pic=22");
-		}
-		int Qtd_Networks = WiFi.scanNetworks();
-		for(int i = 0; i < Qtd_Networks; i++){
-			if(i <= 5){
-				String Potencia_Sinal = "19";
-				if(WiFi.RSSI(i) <= -67) Potencia_Sinal = "20";
-				if(WiFi.RSSI(i) <= -80) Potencia_Sinal = "21";
-				WriteNextion("s" + String(i) + ".pic=" + Potencia_Sinal);
-				WriteNextion("t" + String(i) + ".txt=\"" + WiFi.SSID(i) + "\"");
+	for(int i = 0; i <= 5; i++){
+		WriteNextion("s" + String(i) + ".pic=22");
+		WriteNextion("t" + String(i) + ".txt=\"\"");
+		WriteNextion("p" + String(i) + ".pic=22");
+	}
+	int Qtd_Networks = WiFi.scanNetworks();
+	for(int i = 0; i < Qtd_Networks; i++){
+		if(i <= 5){
+			String Potencia_Sinal = "19";
+			if(WiFi.RSSI(i) <= -67) Potencia_Sinal = "20";
+			if(WiFi.RSSI(i) <= -80) Potencia_Sinal = "21";
+			WriteNextion("s" + String(i) + ".pic=" + Potencia_Sinal);
+			String SSID = WiFi.SSID(i);
+			WriteNextion("t" + String(i) + ".txt=\"" + SSID + "\"");
+			if(SSID.equals(getEEPROM_SSID())){
+				WriteNextion("p" + String(i) + ".pic=18");
+			} else{
 				WriteNextion("p" + String(i) + ".pic=" + (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "18" : "17"));
 			}
 		}
 	}
-	Serial.flush();
 }
 void ConectarWIFI(String SSID, String PASS){
+	Serial.flush();
+	WriteNextion("page CONNECT");
 	WiFi.begin(SSID.c_str(), PASS.c_str());
 	int WiFi_Timeout = WIFI_TIMEOUT;
 	int Progresso = 0;
@@ -149,13 +159,13 @@ void ConectarWIFI(String SSID, String PASS){
 	Heltec.display->setFont(ArialMT_Plain_10);
 	Heltec.display->drawString(Heltec.display->getWidth() / 2, 50, (WiFi.status() == WL_CONNECTED) ? "SUCESSO" : "FALHA");
 	Heltec.display->display();
+	delay(2000);
 	if(WiFi.status() == WL_CONNECTED){
-		delay(2000);
 		setEEPROM_SSID(SSID);
 		setEEPROM_PASS(PASS);
 		Servidor.begin();
-		WriteNextion("page CONNECT");
 	} else{
+		WiFi.disconnect();
 		WriteNextion("page keybdA");
 		WriteNextion("show.pco=36864");
 	}
@@ -165,11 +175,11 @@ void DesconectarWIFI(){
 	if(Cliente.connected()){
 		EnviarTCP("desconectar");
 		Cliente.stop();
-
 	}
-	Servidor.end();
-	if(WiFi.isConnected()) WiFi.disconnect();
-	Status();
+	if(WiFi.isConnected()){
+		Servidor.end();
+		WiFi.disconnect();
+	}
 }
 
 void clear_EEPROM(){
@@ -197,7 +207,6 @@ void setEEPROM_AUTOCONNECT(bool AUTOCONNECT){
 	EEPROM.write(0, (AUTOCONNECT ? '1' : '0'));
 	EEPROM.commit();
 	EEPROM.end();
-
 }
 bool getEEPROM_AUTOCONNECT(){
 	bool AUTOCONNECT;
@@ -221,6 +230,9 @@ String getEEPROM_SSID(){
 	return SSID;
 }
 
+void BT(){
+	WriteNextion("rest");
+}
 void WriteNextion(String Mensagem){
 	Serial.print((Mensagem.endsWith("\n") ? Mensagem.substring(0, Mensagem.length() - 1) : Mensagem));
 	Serial.write(0xFF);
