@@ -13,7 +13,6 @@ namespace LCDHM {
     public partial class FormPrincipal : Form {
         private int
                 PAGINA = 0,
-                IPLocalLenght,
                 ANALISE_LINHA = 0,
                 ANALISE_MIN_FPS = 60,
                 FPS_MIN = 0,
@@ -64,13 +63,11 @@ namespace LCDHM {
             IPLocal = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First().ToString();
             String IPFormatado = IPLocal.Split('.')[0] + "." + IPLocal.Split('.')[1] + "." + IPLocal.Split('.')[2] + ".";
             Menu_IP.Text = IPFormatado;
-            IPLocalLenght = IPFormatado.Length;
         }
 
-        private void SerialRecebeu() {
+        private void SerialRecebeu(String entrada) {
+            Console.WriteLine(entrada);
             if (Cliente.Connected) {
-                String entrada = TCPReadLine();
-                Console.WriteLine(entrada);
                 if (entrada.Contains("init")) ConectarMSI();
                 if (entrada.Contains("MENU") || entrada.Contains("p0")) MudarPagina(0);
                 if (entrada.Contains("p1")) MudarPagina(1);
@@ -134,7 +131,7 @@ namespace LCDHM {
             EnviarAutomatico();
         }
         private void TimerTick(object sender, EventArgs e) {
-            if (Cliente.Connected && Cliente.GetStream().DataAvailable) SerialRecebeu();
+           
             EnviarAutomatico();
         }
         private void EnviarAutomatico() {
@@ -273,23 +270,23 @@ namespace LCDHM {
             String LinhaLida = "";
             while (Cliente.Connected && Cliente.GetStream().DataAvailable) {
                 int b = Cliente.GetStream().ReadByte();
-                if (b == -1 || b == '\n') break;
+                if ((char)b == '\n' || (char)b == 13) break;
                 LinhaLida += (char)b;
             }
-
             return LinhaLida;
         }
         private void ConectarTCP(String IP) {
             try {
                 Cliente = new TcpClient();
-                if (Cliente.ConnectAsync(IP, TCP_PORTA).Wait(1000)) {
+                if (Cliente.ConnectAsync(IP, TCP_PORTA).Wait(2000)) {
                     menu_Conectar.Visible = false;
                     menu_Desconectar.Visible = true;
-                    TCPPrintLine("page 0");
                     Properties.Settings.Default.IP_Favorito = IP;
                     Properties.Settings.Default.Save();
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado", ToolTipIcon.Info);
+                    TCP_Listener.Start();
                     timer.Start();
+
                 } else {
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar a " + IP + ":" + TCP_PORTA, ToolTipIcon.Error);
                 }
@@ -300,13 +297,14 @@ namespace LCDHM {
 
         private void DesconectarTCP() {
             if (Cliente.Connected) {
-                Enviar("page 0");
                 timer.Stop();
+                TCP_Listener.Stop();
                 menu_Conectar.Visible = true;
                 menu_Desconectar.Visible = false;
                 if (HM != null) HM.Disconnect();
                 if (CM != null) CM.Disconnect();
                 Cliente.Close();
+                Cliente.Dispose();
                 IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
             }
         }
@@ -382,31 +380,35 @@ namespace LCDHM {
             Enviar("Overclock.tfan", FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO ? "AUTO" : FAN_BOOST.ToString());
         }
 
-        
         private void Menu_Conectar_Click(object sender, EventArgs e) {
             MenuContexto.Hide();
             Properties.Settings.Default.Reload();
             String IP = Properties.Settings.Default.IP_Favorito;
-            IPAddress RealIP;
-            if (IPAddress.TryParse(IP, out RealIP)) ConectarTCP(IP);
+            if (IPAddress.TryParse(IP, out _)) ConectarTCP(IP);
 
         }
         private void Menu_IP_EnterClick(object sender, KeyEventArgs e) {
-            IPAddress RealIP;
-            if (e.KeyCode == Keys.Enter && IPAddress.TryParse(Menu_IP.Text, out RealIP)) {
+            if (e.KeyCode == Keys.Enter && IPAddress.TryParse(Menu_IP.Text, out _)) {
                 MenuContexto.Hide();
                 ConectarTCP(Menu_IP.Text);
 
             }
 
         }
+
+        private void TCP_Listener_Tick(object sender, EventArgs e) {
+            if (Cliente.Connected && Cliente.GetStream().DataAvailable) {
+                String entrada = TCPReadLine();
+                if (entrada.Length > 1) SerialRecebeu(entrada);                
+            }
+        }
+
         private void Menu_IP_TextChanged(object sender, EventArgs e) {
             if (!Menu_IP.Text.StartsWith(IPLocal.Substring(0, IPLocal.Length - 3))) {
                 Menu_IP.Text = IPLocal.Substring(0, IPLocal.Length - 3);
             }
             String IP = Menu_IP.Text;
-            IPAddress RealIP;
-            if (IPAddress.TryParse(IP, out RealIP)) {
+            if (IPAddress.TryParse(IP, out _)) {
                 Menu_IP.ForeColor = Color.FromArgb(255, 0, 184, 192);
             } else {
                 Menu_IP.ForeColor = Color.FromArgb(255, 100, 0, 0);
@@ -428,7 +430,7 @@ namespace LCDHM {
             this.ShowInTaskbar = true;
         }
         private void Ocultar_Configuracoes() {
-            this.Location = new Point(-10000, -10000);            
+            this.Location = new Point(-10000, -10000);
             Hide();
             this.Opacity = 0;
             this.ShowInTaskbar = false;

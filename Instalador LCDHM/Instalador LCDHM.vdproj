@@ -80,6 +80,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -104,6 +112,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
     }
@@ -273,7 +289,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Instalador LCDHM"
         "ProductCode" = "8:{41B4BDB4-2C17-434D-ACA5-7349D4140588}"
-        "PackageCode" = "8:{4CAE0BD4-98EA-4825-BECC-32312170077A}"
+        "PackageCode" = "8:{BB272C5D-4114-47AD-A485-D1554F8E3774}"
         "UpgradeCode" = "8:{6AC0744F-6BCB-4076-AB0E-E54892E4E07E}"
         "AspNetVersion" = "8:1.1.4322.0"
         "RestartWWWService" = "11:FALSE"
