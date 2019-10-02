@@ -105,6 +105,6 @@ typedef long pthread_cond_t;
 #define interrupts() sei()
 #define noInterrupts() cli()
 
-#include "LCDHM ESP32 LORA V2.ino"
+#include "LCDHM_ESP32.ino"
 #endif
 #endif

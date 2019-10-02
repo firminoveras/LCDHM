@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:Instalador"
+"ProjectName" = "8:LCDHM_Instalador"
 "LanguageId" = "3:1046"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1046"
@@ -157,11 +157,6 @@
             "AssemblyAsmDisplayName" = "8:MSIAfterburner.NET, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_23A0D40E11EBAE32CED1E95D3CB172AE"
-                    {
-                    "Name" = "8:MSIAfterburner.NET.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:MSIAfterburner.NET.dll"
             "TargetName" = "8:"
@@ -208,11 +203,6 @@
             "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 "ScatterAssemblies"
                 {
-                    "_E72C676775BDA4E326E1A33A69A871F5"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"

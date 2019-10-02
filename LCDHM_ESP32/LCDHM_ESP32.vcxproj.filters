@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="LCDHM ESP32 LORA V2.ino" />
+    <None Include="LCDHM_ESP32.ino" />
     <None Include="src\arduino folders read me.txt">
       <Filter>Misc Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="__vm\.LCDHM ESP32 LORA V2.vsarduino.h">
+    <ClInclude Include="__vm\.LCDHM_ESP32.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
