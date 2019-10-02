@@ -308,8 +308,7 @@ namespace LCDHM {
             menu_Desconectar.Visible = false;
             if (HM != null) HM.Disconnect();
             if (CM != null) CM.Disconnect();
-            if (Cliente != null && Cliente.Connected) Cliente.Close();
-            if (Cliente != null && Cliente.Connected) Cliente.Dispose();
+            if (Cliente != null && Cliente.Connected) { Cliente.Close(); Cliente.Dispose(); }
             IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
 
         }
@@ -417,7 +416,7 @@ namespace LCDHM {
         private void Menu_Configurar_Click(object sender, EventArgs e) => Mostrar_Configuracoes();
         private void Menu_Sobre_Click(object sender, EventArgs e) => new SobreForm().Show();
         private void Menu_Sair_Click(object sender, EventArgs e) {
-            TCP_Desconectar();
+            if (Cliente != null && Cliente.Connected) TCP_Desconectar();
             Application.Exit();
         }
 
