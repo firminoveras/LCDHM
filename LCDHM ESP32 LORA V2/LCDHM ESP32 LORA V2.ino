@@ -1,10 +1,3 @@
-/*
- Name:		LCDHM_ESP32_LORA_V2.ino
- Created:	01/10/2019 20:33:26
- Author:	firmi
-*/
-
-// the setup function runs once when you press reset or power the board
 #include <Wire.h>
 #include <SPI.h>
 #include <heltec.h>
@@ -13,7 +6,6 @@
 #include <WiFi.h>
 #include <ETH.h>
 #include <EEPROM.h>
-
 
 #define WIFI_TIMEOUT 30
 #define SERIAL_TIMEOUT 50
@@ -38,7 +30,6 @@ void loop(){
 			if(Serial.available() > 0){
 				String SSID = Serial.readStringUntil(':');
 				if(SSID.equals(getEEPROM_SSID())) ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS()); else ConectarWIFI(SSID, Serial.readStringUntil(':'));
-
 			} else{
 				ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS());
 			}
