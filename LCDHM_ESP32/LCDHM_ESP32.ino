@@ -34,7 +34,6 @@ void loop(){
 				ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS());
 			}
 		} else if(entrada.startsWith("scan")) ScanWIFI();
-		else if(entrada.startsWith("autoconectar")) setEEPROM_AUTOCONNECT(Serial.readStringUntil(':').startsWith("true"));
 		else if(entrada.startsWith("desconectar")) DesconectarWIFI();
 		else EnviarTCP(entrada);
 	}
@@ -44,7 +43,7 @@ void loop(){
 			BytesIn = 0;
 			BytesOut = 0;
 			ClienteChanged = false;
-			WriteNextion("page CONNECT");
+			WriteNextion("page Splash");
 			Status();
 		}
 		if(Servidor.hasClient()){
@@ -105,24 +104,30 @@ void Status(){
 	Heltec.display->display();
 }
 void ScanWIFI(){
-	for(int i = 0; i <= 5; i++){
-		WriteNextion("s" + String(i) + ".pic=22");
-		WriteNextion("t" + String(i) + ".txt=\"\"");
-		WriteNextion("p" + String(i) + ".pic=22");
-	}
-	int Qtd_Networks = WiFi.scanNetworks();
-	for(int i = 0; i < Qtd_Networks; i++){
-		if(i <= 5){
-			String Potencia_Sinal = "19";
-			if(WiFi.RSSI(i) <= -67) Potencia_Sinal = "20";
-			if(WiFi.RSSI(i) <= -80) Potencia_Sinal = "21";
-			WriteNextion("s" + String(i) + ".pic=" + Potencia_Sinal);
-			String SSID = WiFi.SSID(i);
-			WriteNextion("t" + String(i) + ".txt=\"" + SSID + "\"");
-			if(SSID.equals(getEEPROM_SSID())){
-				WriteNextion("p" + String(i) + ".pic=18");
-			} else{
-				WriteNextion("p" + String(i) + ".pic=" + (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "18" : "17"));
+	if(WiFi.isConnected()){
+		WriteNextion("page CONNECT");
+		WriteNextion("j0.val=50");
+		WriteNextion("CONNECT.t.txt=\"Aguardando " + WiFi.localIP().toString() + "\"");
+	}else{
+		for(int i = 0; i <= 5; i++){
+			WriteNextion("s" + String(i) + ".pic=22");
+			WriteNextion("t" + String(i) + ".txt=\"\"");
+			WriteNextion("p" + String(i) + ".pic=22");
+		}
+		int Qtd_Networks = WiFi.scanNetworks();
+		for(int i = 0; i < Qtd_Networks; i++){
+			if(i <= 5){
+				String Potencia_Sinal = "19";
+				if(WiFi.RSSI(i) <= -67) Potencia_Sinal = "20";
+				if(WiFi.RSSI(i) <= -80) Potencia_Sinal = "21";
+				WriteNextion("s" + String(i) + ".pic=" + Potencia_Sinal);
+				String SSID = WiFi.SSID(i);
+				WriteNextion("t" + String(i) + ".txt=\"" + SSID + "\"");
+				if(SSID.equals(getEEPROM_SSID())){
+					WriteNextion("p" + String(i) + ".pic=18");
+				} else{
+					WriteNextion("p" + String(i) + ".pic=" + (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "18" : "17"));
+				}
 			}
 		}
 	}
@@ -130,6 +135,7 @@ void ScanWIFI(){
 void ConectarWIFI(String SSID, String PASS){
 	Serial.flush();
 	WriteNextion("page CONNECT");
+	WriteNextion("CONNECT.t.txt=\"Conectando a " + SSID + "\"");
 	WiFi.begin(SSID.c_str(), PASS.c_str());
 	int WiFi_Timeout = WIFI_TIMEOUT;
 	int Progresso = 0;
@@ -144,6 +150,7 @@ void ConectarWIFI(String SSID, String PASS){
 		WiFi_Timeout--;
 		Heltec.display->drawProgressBar(10, 40, Heltec.display->getWidth() - 20, 5, Progresso);
 		Heltec.display->display();
+		WriteNextion("j0.val=" + String((int)Progresso/2));
 		if(Progresso < 90) Progresso += 5;
 		delay(100);
 	}
@@ -151,7 +158,10 @@ void ConectarWIFI(String SSID, String PASS){
 	Heltec.display->setFont(ArialMT_Plain_10);
 	Heltec.display->drawString(Heltec.display->getWidth() / 2, 50, (WiFi.status() == WL_CONNECTED) ? "SUCESSO" : "FALHA");
 	Heltec.display->display();
+	WriteNextion("t.txt=\"" + String((WiFi.status() == WL_CONNECTED) ? "Aguardando " + WiFi.localIP().toString() : "Falha ao conectar") + "\"");
+	WriteNextion("j0.val=50");
 	delay(2000);
+	
 	if(WiFi.status() == WL_CONNECTED){
 		setEEPROM_SSID(SSID);
 		setEEPROM_PASS(PASS);
@@ -169,9 +179,11 @@ void DesconectarWIFI(){
 		Cliente.stop();
 	}
 	if(WiFi.isConnected()){
-		Servidor.end();
+		Servidor.end();		
 		WiFi.disconnect();
 	}
+	while(WiFi.isConnected());
+	WriteNextion("page Splash");
 }
 
 void clear_EEPROM(){

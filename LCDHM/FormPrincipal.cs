@@ -58,15 +58,13 @@ namespace LCDHM {
         }
         private void AtualizarIPLocal() {
             IPLocal = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First().ToString();
-            String IPFormatado = IPLocal.Split('.')[0] + "." + IPLocal.Split('.')[1] + "." + IPLocal.Split('.')[2] + ".";
-            Menu_IP.Text = IPFormatado;
+            Menu_IP.Text = IPLocal.Split('.')[0] + "." + IPLocal.Split('.')[1] + "." + IPLocal.Split('.')[2] + ".";
         }
 
         private void TCP_Listener_Tick(object sender, EventArgs e) {
             if (Cliente.Connected && Cliente.GetStream().DataAvailable) {
                 String entrada = TCP_ReadLine();
                 if (entrada.Length > 1) {
-                    Console.WriteLine(entrada);
                     if (entrada.Contains("init")) MSI_Conectar();
                     if (entrada.Contains("desconectar")) TCP_Desconectar();
                     if (entrada.Contains("MENU") || entrada.Contains("p0")) MudarPagina(0);
@@ -259,6 +257,8 @@ namespace LCDHM {
                     if (!MensagemTCP.EndsWith("\n")) MensagemTCP += '\n';
                     Byte[] MensagemTCPByte = Encoding.ASCII.GetBytes(MensagemTCP);
                     Cliente.GetStream().Write(MensagemTCPByte, 0, MensagemTCPByte.Length);
+                } else {
+                    IconeNotificacao.ShowBalloonTip(100, "LCDHM - Erro de Conexão", "Cluente Desconectado", ToolTipIcon.Error);
                 }
             } catch (Exception ex) {
                 TCP_Desconectar();
@@ -310,11 +310,10 @@ namespace LCDHM {
             if (CM != null) CM.Disconnect();
             if (Cliente != null && Cliente.Connected) { Cliente.Close(); Cliente.Dispose(); }
             IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
-
         }
 
         private void MSI_Conectar() {
-            TCP_Enviar("j0", 10);
+            TCP_Enviar("j0", 55);
             TCP_Enviar("t", "Inicializando MSI");
             while (Process.GetProcessesByName("MSIAfterburner").Length == 0) {
                 try {
@@ -323,7 +322,7 @@ namespace LCDHM {
                     Mostrar_Configuracoes();
                 }
             }
-            TCP_Enviar("j0", 25);
+            TCP_Enviar("j0", 58);
             TCP_Enviar("t", "Criando Conectividade");
             while (true) {
                 try {
@@ -336,7 +335,7 @@ namespace LCDHM {
                 }
             }
 
-            TCP_Enviar("j0", 35);
+            TCP_Enviar("j0", 60);
             TCP_Enviar("t", "Conectando ao MSI");
             while (true) {
                 try {
@@ -349,17 +348,17 @@ namespace LCDHM {
                 }
             }
 
-            TCP_Enviar("j0", 50);
+            TCP_Enviar("j0", 70);
             TCP_Enviar("t", "Definindo Constantes");
             CPU_THREADS = Environment.ProcessorCount;
             CPU_CORES = 0;
             System.Management.ManagementObjectSearcher managementObjectSearcher = new System.Management.ManagementObjectSearcher("Select * from Win32_Processor");
             foreach (System.Management.ManagementBaseObject item in managementObjectSearcher.Get()) this.CPU_CORES += int.Parse(item["NumberOfCores"].ToString());
             managementObjectSearcher.Dispose();
-            TCP_Enviar("j0", 60);
+            TCP_Enviar("j0", 80);
             RAM_TOTAL = Convert.ToInt32(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
 
-            TCP_Enviar("j0", 70);
+            TCP_Enviar("j0", 90);
             TCP_Enviar("t", "Definindo Clocks");
             FAN_BOOST = int.Parse(CM.GpuEntries[0].FanSpeedCur.ToString("N0"));
 
@@ -390,9 +389,7 @@ namespace LCDHM {
         private void Menu_Conectar_Click(object sender, EventArgs e) {
             MenuContexto.Hide();
             Properties.Settings.Default.Reload();
-            String IP = Properties.Settings.Default.IP_Favorito;
-            if (IPAddress.TryParse(IP, out _)) TCP_Conectar(IP);
-
+            if (IPAddress.TryParse(Properties.Settings.Default.IP_Favorito, out _)) TCP_Conectar(Properties.Settings.Default.IP_Favorito);
         }
         private void Menu_IP_EnterClick(object sender, KeyEventArgs e) {
             int pontos = 0;
@@ -460,4 +457,7 @@ namespace LCDHM {
         public void TCP_Enviar(String Variavel, Color c) => TCP_WriteLine(Variavel + ".pco=" + (((c.R >> 3) << 11) + ((c.G >> 2) << 5) + (c.B >> 3)).ToString("N0").Replace(".", ""));
     }
 }
+
+//TODO: Melhorar Listener TCP
+//TODO: MElhorar Listener de perda de conexão
 

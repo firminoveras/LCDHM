@@ -37,7 +37,7 @@
             this.groupBox.ForeColor = System.Drawing.Color.White;
             this.groupBox.Location = new System.Drawing.Point(13, 127);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(330, 207);
+            this.groupBox.Size = new System.Drawing.Size(330, 149);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Sobre";
@@ -47,11 +47,10 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(266, 171);
+            this.label1.Size = new System.Drawing.Size(217, 114);
             this.label1.TabIndex = 0;
             this.label1.Text = "Desenvolvido por\r\nFirmino Veras\r\ngithub.com/firminoveras/LCDHM\r\n\r\nÍcones por \r\nRo" +
-    "undIcons em www.flaticon.com\r\n\r\nESP32 Download and Project\r\ngithub.com/firminove" +
-    "ras/LCDHM_ESP32";
+    "undIcons em www.flaticon.com";
             // 
             // panel1
             // 
@@ -68,9 +67,9 @@
             this.BT_Fechar_Info.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_Fechar_Info.Font = new System.Drawing.Font("Tw Cen MT", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_Fechar_Info.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.BT_Fechar_Info.Location = new System.Drawing.Point(13, 340);
+            this.BT_Fechar_Info.Location = new System.Drawing.Point(13, 282);
             this.BT_Fechar_Info.Name = "BT_Fechar_Info";
-            this.BT_Fechar_Info.Size = new System.Drawing.Size(330, 46);
+            this.BT_Fechar_Info.Size = new System.Drawing.Size(330, 52);
             this.BT_Fechar_Info.TabIndex = 5;
             this.BT_Fechar_Info.Text = "Sair";
             this.BT_Fechar_Info.UseVisualStyleBackColor = false;
@@ -81,7 +80,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(355, 398);
+            this.ClientSize = new System.Drawing.Size(355, 346);
             this.Controls.Add(this.BT_Fechar_Info);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.panel1);
