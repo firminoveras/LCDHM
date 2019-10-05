@@ -330,12 +330,12 @@ namespace LCDHM {
                     CM = new ControlMemory();
                     break;
                 } catch (Exception) {
-                    TCP_Enviar("j0", 30);
+                    TCP_Enviar("j0", 60);
                     Thread.Sleep(500);
                 }
             }
 
-            TCP_Enviar("j0", 60);
+            TCP_Enviar("j0", 64);
             TCP_Enviar("t", "Conectando ao MSI");
             while (true) {
                 try {
@@ -343,12 +343,12 @@ namespace LCDHM {
                     CM.Connect();
                     break;
                 } catch (Exception) {
-                    TCP_Enviar("j0", 40);
+                    TCP_Enviar("j0", 68);
                     Thread.Sleep(500);
                 }
             }
 
-            TCP_Enviar("j0", 70);
+            TCP_Enviar("j0", 75);
             TCP_Enviar("t", "Definindo Constantes");
             CPU_THREADS = Environment.ProcessorCount;
             CPU_CORES = 0;
