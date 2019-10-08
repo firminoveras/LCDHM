@@ -141,8 +141,15 @@
     <Compile Include="FormPrincipal.Designer.cs">
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="MSIAfterburner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SobreForm.cs">
       <SubType>Form</SubType>
@@ -150,19 +157,16 @@
     <Compile Include="SobreForm.Designer.cs">
       <DependentUpon>SobreForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TCPESP32.cs" />
+    <Compile Include="TemaDarkRendererToolStrip.cs" />
     <EmbeddedResource Include="FormPrincipal.resx">
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="SobreForm.resx">
       <DependentUpon>SobreForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -193,39 +197,33 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\link.png">
+    <None Include="Resources\ico_conectar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\broken-link.png">
+    <None Include="Resources\ico_desconectar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\repeat.png">
+    <None Include="Resources\ico_config.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\settings-6.png">
+    <None Include="Resources\ico_info.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\info.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\error.png">
+    <None Include="Resources\ico_sair.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LOGO.bmp" />
     <None Include="Resources\Icone_LCDHM.ico" />
-    <Content Include="Resources\star.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

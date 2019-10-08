@@ -63,9 +63,9 @@ namespace LCDHM.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap broken_link {
+        public static System.Drawing.Bitmap conectar {
             get {
-                object obj = ResourceManager.GetObject("broken-link", resourceCulture);
+                object obj = ResourceManager.GetObject("conectar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,19 @@ namespace LCDHM.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap error {
+        public static System.Drawing.Bitmap configuracoes {
             get {
-                object obj = ResourceManager.GetObject("error", resourceCulture);
+                object obj = ResourceManager.GetObject("configuracoes", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap desconectar {
+            get {
+                object obj = ResourceManager.GetObject("desconectar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +113,9 @@ namespace LCDHM.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap link {
+        public static System.Drawing.Bitmap Logo {
             get {
-                object obj = ResourceManager.GetObject("link", resourceCulture);
+                object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,39 +123,9 @@ namespace LCDHM.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap LOGO {
+        public static System.Drawing.Bitmap sair {
             get {
-                object obj = ResourceManager.GetObject("LOGO", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap repeat {
-            get {
-                object obj = ResourceManager.GetObject("repeat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap settings_6 {
-            get {
-                object obj = ResourceManager.GetObject("settings-6", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap star {
-            get {
-                object obj = ResourceManager.GetObject("star", resourceCulture);
+                object obj = ResourceManager.GetObject("sair", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

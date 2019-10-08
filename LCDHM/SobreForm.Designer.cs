@@ -47,14 +47,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(217, 114);
+            this.label1.Size = new System.Drawing.Size(283, 114);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Desenvolvido por\r\nFirmino Veras\r\ngithub.com/firminoveras/LCDHM\r\n\r\nÍcones por \r\nRo" +
-    "undIcons em www.flaticon.com";
+            this.label1.Text = "Desenvolvido por\r\nFirmino Veras\r\ngithub.com/firminoveras/LCDHM\r\n\r\nÍcones por \r\nMi" +
+    "crosoft Visual Studio 2017 Image Library";
             // 
             // panel1
             // 
-            this.panel1.BackgroundImage = global::LCDHM.Properties.Resources.LOGO;
+            this.panel1.BackgroundImage = global::LCDHM.Properties.Resources.Logo;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
