@@ -5,12 +5,13 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace LCDHM {
+
     public partial class FormPrincipal : Form {
+
         private int
                 PAGINA = 0,
                 ANALISE_LINHA = 0,
@@ -40,26 +41,20 @@ namespace LCDHM {
         private TCPESP32
                 Cliente;
 
-        private String
-                IPLocal;
-
         public FormPrincipal() {
             InitializeComponent();
             this.MenuIPs.Renderer = new ToolStripProfessionalRenderer(new TemaDarkRendererToolStrip());
             this.MenuContexto.Renderer = new ToolStripProfessionalRenderer(new TemaDarkRendererToolStrip());
         }
 
-        private void Form1_Load(object sender, EventArgs e) {
+        private void FormPrincipalLoad(object sender, EventArgs e) {
             Ocultar_Configuracoes();
-            Properties.Settings.Default.Reload();
+            Properties.Settings.Default.Reload();            
             Text_MSI_Diretorio.Text = Properties.Settings.Default.MSI_Directory;
             Text_Steam_Diretorio.Text = Properties.Settings.Default.Steam_Directory;
+            Menu_IP.Text = Properties.Settings.Default.IP_Favorito;
             if (!(Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe"))) Mostrar_Configuracoes();
-            AtualizarIPLocal();
-        }
-        private void AtualizarIPLocal() {
-            IPLocal = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).First().ToString();
-            Menu_IP.Text = IPLocal.Split('.')[0] + "." + IPLocal.Split('.')[1] + "." + IPLocal.Split('.')[2] + ".";
+            IconeNotificacao.Text = "LCDHM - Desconectado";
         }
 
         private void TCP_Listener_Tick(object sender, EventArgs e) {
@@ -123,15 +118,18 @@ namespace LCDHM {
                 }
             }
         }
+
         private void MudarPagina(int PG_Index) {
             PAGINA = PG_Index;
             TCP_EnviarAutomatico();
         }
+
         private void TCP_EnviarAutomatico() {
             int fps;
             switch (PAGINA) {
                 default:
                     break;
+
                 case 1:
                     fps = int.Parse(MSI.GetMSIEntidade("Framerate").Data.ToString("N0"));
                     if (fps == 0) {
@@ -155,6 +153,7 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("GPU.t8", MSI.GetMSIEntidade("Fan tachometer").Data.ToString());
                     Cliente.TCP_Enviar("GPU.t9", MSI.GetMSIEntidade("Power").Data.ToString());
                     break;
+
                 case 2:
                     fps = int.Parse(MSI.GetMSIEntidade("Framerate").Data.ToString("N0"));
                     Cliente.TCP_Enviar("gGPU", 0, fps, 0, 100, 0, 100);
@@ -163,6 +162,7 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("Overclock.t10", fps.ToString() + " FPS");
                     Cliente.TCP_Enviar("gGPU", 2, 60, 0, 100, 0, 100);
                     break;
+
                 case 3:
                     Cliente.TCP_Enviar("CPU.t12", MSI.GetMSIEntidade("CPU usage").Data.ToString("N0"));
                     Cliente.TCP_Enviar("CPU.t13", MSI.GetMSIEntidade("CPU fan speed").Data.ToString());
@@ -184,6 +184,7 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("gCPU", 0, int.Parse(MSI.GetMSIEntidade("CPU usage").Data.ToString("N0")), 0, 100, 0, 81);
                     Cliente.TCP_Enviar("gCPU", 1, int.Parse(MSI.GetMSIEntidade("CPU temperature").Data.ToString("N0")), 0, 100, 0, 81);
                     break;
+
                 case 4:
                     float RAM_Uso = MSI.GetMSIEntidade("RAM usage").Data;
                     float RAM_Porcentagem = (RAM_Uso / RAM_TOTAL) * 100;
@@ -202,6 +203,7 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("MEM.t29", NET_INDEX.ToString());
                     Cliente.TCP_Enviar("gMEM", 0, int.Parse(RAM_Porcentagem.ToString("N0")), 0, 100, 0, 81);
                     break;
+
                 case 5:
                     float RAM_Uso2 = MSI.GetMSIEntidade("RAM usage").Data;
                     float RAM_Porcentagem2 = (RAM_Uso2 / RAM_TOTAL) * 100;
@@ -223,6 +225,7 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
                     Cliente.TCP_Enviar("s3", 0, int.Parse(RAM_Porcentagem2.ToString("N0")), 0, 100, 0, 51);
                     break;
+
                 case 7:
                     fps = Convert.ToInt32(MSI.GetMSIEntidade("Framerate").Data);
                     Cliente.TCP_Enviar("ANALISE.t" + ANALISE_LINHA + "0", fps.ToString("N0"));
@@ -259,17 +262,21 @@ namespace LCDHM {
                     Cliente.ReceiveTimeout = 2000;
                     Cliente.SendTimeout = 2000;
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado", ToolTipIcon.Info);
+                    IconeNotificacao.Text = "LCDHM - Conectado a "+IP;
                     TCP_Listener.Start();
                     timer.Start();
                 } else {
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar a " + IP + ":" + TCP_PORTA, ToolTipIcon.Error);
-                    AtualizarIPLocal();
+                    Properties.Settings.Default.Reload();
+                    Menu_IP.Text = Properties.Settings.Default.IP_Favorito;
                 }
             } catch (Exception ex) {
                 IconeNotificacao.ShowBalloonTip(1000, "LCDHM", ex.Message, ToolTipIcon.Error);
-                AtualizarIPLocal();
+                Properties.Settings.Default.Reload();
+                Menu_IP.Text = Properties.Settings.Default.IP_Favorito;
             }
         }
+
         private void TCP_Desconectar() {
             timer.Stop();
             TCP_Listener.Stop();
@@ -318,6 +325,7 @@ namespace LCDHM {
             Thread.Sleep(600);
             Cliente.TCP_Enviar("page Principal");
         }
+
         private void MSI_EnviarTimer(object sender, EventArgs e) => TCP_EnviarAutomatico();
 
         private void MSI_AtualizarClock() {
@@ -332,6 +340,7 @@ namespace LCDHM {
             Properties.Settings.Default.Reload();
             if (IPAddress.TryParse(Properties.Settings.Default.IP_Favorito, out _)) TCP_Conectar(Properties.Settings.Default.IP_Favorito);
         }
+
         private void Menu_IP_EnterClick(object sender, KeyEventArgs e) {
             int pontos = 0;
             foreach (char c in Menu_IP.Text) if (c == '.') pontos++;
@@ -340,6 +349,7 @@ namespace LCDHM {
                 TCP_Conectar(Menu_IP.Text);
             }
         }
+
         private void Menu_IP_TextChanged(object sender, EventArgs e) {
             String IP = Menu_IP.Text;
             int pontos = 0;
@@ -350,9 +360,15 @@ namespace LCDHM {
                 Menu_IP.ForeColor = Color.FromArgb(255, 200, 50, 50);
             }
         }
+
         private void Menu_Desconectar_Click(object sender, EventArgs e) => TCP_Desconectar();
+
         private void Menu_Configurar_Click(object sender, EventArgs e) => Mostrar_Configuracoes();
-        private void Menu_Sobre_Click(object sender, EventArgs e) { new SobreForm().Show(); }
+
+        private void Menu_Sobre_Click(object sender, EventArgs e) {
+            new SobreForm().Show();
+        }
+
         private void Menu_Sair_Click(object sender, EventArgs e) {
             if (Cliente != null && Cliente.Connected) TCP_Desconectar();
             Application.Exit();
@@ -365,6 +381,7 @@ namespace LCDHM {
             this.Opacity = 100;
             this.ShowInTaskbar = true;
         }
+
         private void Ocultar_Configuracoes() {
             this.Location = new Point(-10000, -10000);
             Hide();
@@ -372,10 +389,12 @@ namespace LCDHM {
             this.ShowInTaskbar = false;
             Enabled = false;
         }
+
         private void BT_Buscar_Steam_Click(object sender, EventArgs e) {
             FileDialog.FileName = "Steam.exe";
             if (FileDialog.ShowDialog().ToString() == "OK") Text_Steam_Diretorio.Text = FileDialog.FileName;
         }
+
         private void BT_Aplicar_Click(object sender, EventArgs e) {
             if (Text_MSI_Diretorio.Text.EndsWith("MSIAfterburner.exe") && Text_Steam_Diretorio.Text.EndsWith("Steam.exe")) {
                 Properties.Settings.Default.MSI_Directory = Text_MSI_Diretorio.Text;
@@ -386,13 +405,13 @@ namespace LCDHM {
                 IconeNotificacao.ShowBalloonTip(1000, "Endereço Inválido", "Caminho do programa da Steam ou do Afterburner inválido.", ToolTipIcon.Error);
             }
         }
+
         private void BT_Buscar_MSI_Click(object sender, EventArgs e) {
             FileDialog.FileName = "MSIAfterburner.exe";
             if (FileDialog.ShowDialog().ToString() == "OK") Text_MSI_Diretorio.Text = FileDialog.FileName;
-        }        
+        }
     }
 }
 
 //TODO: Melhorar Listener TCP
 //TODO: Melhorar Listener de perda de conexão
-

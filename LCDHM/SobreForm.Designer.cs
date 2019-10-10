@@ -32,30 +32,38 @@
             // 
             // groupBox
             // 
+            this.groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox.Controls.Add(this.label1);
-            this.groupBox.Font = new System.Drawing.Font("Tw Cen MT", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox.ForeColor = System.Drawing.Color.White;
-            this.groupBox.Location = new System.Drawing.Point(13, 127);
+            this.groupBox.Location = new System.Drawing.Point(12, 126);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(330, 149);
+            this.groupBox.Size = new System.Drawing.Size(331, 149);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Sobre";
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 21);
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(38, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(283, 114);
+            this.label1.Size = new System.Drawing.Size(259, 102);
             this.label1.TabIndex = 0;
             this.label1.Text = "Desenvolvido por\r\nFirmino Veras\r\ngithub.com/firminoveras/LCDHM\r\n\r\nÍcones por \r\nMi" +
     "crosoft Visual Studio 2017 Image Library";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
             this.panel1.BackgroundImage = global::LCDHM.Properties.Resources.Logo;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(331, 108);
@@ -63,15 +71,15 @@
             // 
             // BT_Fechar_Info
             // 
-            this.BT_Fechar_Info.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.BT_Fechar_Info.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(27)))), ((int)(((byte)(28)))));
             this.BT_Fechar_Info.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BT_Fechar_Info.Font = new System.Drawing.Font("Tw Cen MT", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BT_Fechar_Info.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_Fechar_Info.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.BT_Fechar_Info.Location = new System.Drawing.Point(13, 282);
             this.BT_Fechar_Info.Name = "BT_Fechar_Info";
             this.BT_Fechar_Info.Size = new System.Drawing.Size(330, 52);
             this.BT_Fechar_Info.TabIndex = 5;
-            this.BT_Fechar_Info.Text = "Sair";
+            this.BT_Fechar_Info.Text = "Ocultar";
             this.BT_Fechar_Info.UseVisualStyleBackColor = false;
             this.BT_Fechar_Info.Click += new System.EventHandler(this.BT_Fechar_Info_Click);
             // 
@@ -79,7 +87,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(52)))));
             this.ClientSize = new System.Drawing.Size(355, 346);
             this.Controls.Add(this.BT_Fechar_Info);
             this.Controls.Add(this.groupBox);

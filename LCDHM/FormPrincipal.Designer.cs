@@ -300,7 +300,7 @@ namespace LCDHM {
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "LCDHM";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.FormPrincipalLoad);
             this.MenuContexto.ResumeLayout(false);
             this.MenuIPs.ResumeLayout(false);
             this.MenuIPs.PerformLayout();

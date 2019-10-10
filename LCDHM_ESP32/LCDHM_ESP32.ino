@@ -11,15 +11,22 @@
 #define SERIAL_TIMEOUT 50
 #define PORTA 1199
 
-bool ClienteChanged = false;
+bool AUTOCONECTAR = true, ClienteChanged = false;
 WiFiServer Servidor(PORTA);
 WiFiClient Cliente;
 
-
 void setup(){
-	Heltec.begin(true, false, true);
+	Heltec.begin(false, false, true);
 	Serial.setTimeout(SERIAL_TIMEOUT);
-	Status();
+	pinMode(25, OUTPUT);
+	digitalWrite(25, AUTOCONECTAR);
+	attachInterrupt(digitalPinToInterrupt(GPIO_NUM_0), changeAutoconectar, FALLING);
+}
+
+void changeAutoconectar(){
+	AUTOCONECTAR = !AUTOCONECTAR;
+	digitalWrite(25, AUTOCONECTAR);
+	Serial.println("A");
 }
 
 void loop(){
@@ -36,24 +43,18 @@ void loop(){
 			} else{
 				ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS());
 			}
-
 		} else if(entrada.startsWith("scan")) ScanWIFI();
 		else if(entrada.startsWith("desconectar")) DesconectarWIFI();
 		else EnviarTCP(entrada);
 	}
 	if(Cliente.available() > 0) ReceberTCP();
 	if(WiFi.isConnected() && !Cliente.connected()){
-		if(ClienteChanged){
-			ClienteChanged = false;
-			DesconectarWIFI();
-			Status();
-		}
+		if(ClienteChanged) DesconectarWIFI();
 		if(Servidor.hasClient()){
 			ClienteChanged = true;
 			Cliente = Servidor.available();
 			while(!Cliente.connected());
 			EnviarTCP("init");
-			Status();
 		}
 	}
 }
@@ -73,37 +74,24 @@ void ReceberTCP(){
 	if(Recebido.length() > 0) WriteNextion(Recebido);
 }
 
-void Status(){
-	Heltec.display->setTextAlignment(TEXT_ALIGN_CENTER);
-	Heltec.display->clear();
-	Heltec.display->drawRect(0, 0, Heltec.display->getWidth(), Heltec.display->getHeight());
-	Heltec.display->setFont(ArialMT_Plain_10);
-	Heltec.display->drawString(Heltec.display->getWidth() / 2, 2, "LCDHM - Status");
-	Heltec.display->drawLine(0, 14, Heltec.display->getWidth(), 14);
-	Heltec.display->drawString(Heltec.display->getWidth() / 2, 15, String(WiFi.isConnected() ? String(WiFi.SSID()) : "DESCONECTADO"));
-	if(WiFi.isConnected()){
-		if(Cliente.connected()){
-			Heltec.display->drawString(Heltec.display->getWidth() / 2, 45, "Cliente Conectado");
-		} else{
-			Heltec.display->drawString(Heltec.display->getWidth() / 2, 25, WiFi.macAddress());
-			Heltec.display->drawString(Heltec.display->getWidth() / 2, 35, WiFi.localIP().toString() + ":" + String(PORTA));
-			Heltec.display->drawString(Heltec.display->getWidth() / 2, 45, "Cliente Desconectado");
-		}
-	}
-	Heltec.display->display();
-}
 void ScanWIFI(){
 	if(WiFi.isConnected()){
-		WriteNextion("page CONNECT");
-		WriteNextion("j0.val=50");
-		WriteNextion("CONNECT.t.txt=\"Aguardando " + WiFi.localIP().toString() + "\"");
+		if(ClienteChanged){
+			WriteNextion("page Principal");
+		} else{
+			WriteNextion("page CONNECT");
+			WriteNextion("j0.val=50");
+			WriteNextion("CONNECT.t.txt=\"Aguardando " + WiFi.localIP().toString() + "\"");
+		}
 	} else{
+		WriteNextion("t.txt=\"Buscando...\"");
 		for(int i = 0; i <= 5; i++){
 			WriteNextion("s" + String(i) + ".pic=22");
-			WriteNextion("t" + String(i) + (i == 0 ? ".txt=\"Buscando...\"" : ".txt=\"\""));
+			WriteNextion("t" + String(i) + ".txt=\"\"");
 			WriteNextion("p" + String(i) + ".pic=22");
 		}
 		int Qtd_Networks = WiFi.scanNetworks();
+		WriteNextion("t.txt=\"" + String(Qtd_Networks) + " redes\"");
 		for(int i = 0; i < Qtd_Networks; i++){
 			String Potencia_Sinal = "19";
 			if(WiFi.RSSI(i) <= -67) Potencia_Sinal = "20";
@@ -113,6 +101,7 @@ void ScanWIFI(){
 			WriteNextion("t" + String(i) + ".txt=\"" + SSID + "\"");
 			if(SSID.equals(getEEPROM_SSID())){
 				WriteNextion("p" + String(i) + ".pic=23");
+				if(AUTOCONECTAR) ConectarWIFI(getEEPROM_SSID(), getEEPROM_PASS());
 			} else{
 				WriteNextion("p" + String(i) + ".pic=" + (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "18" : "17"));
 			}
@@ -123,34 +112,22 @@ void ScanWIFI(){
 
 void ConectarWIFI(String SSID, String PASS){
 	if(WiFi.isConnected()){
-
 	} else{
 		WriteNextion("page CONNECT");
 		WriteNextion("CONNECT.t.txt=\"Conectando a " + SSID + "\"");
 		if(PASS.length() > 0)	WiFi.begin(SSID.c_str(), PASS.c_str()); else WiFi.begin(SSID.c_str());
-		Heltec.display->setTextAlignment(TEXT_ALIGN_CENTER);
-		Heltec.display->clear();
-		Heltec.display->drawRect(0, 0, Heltec.display->getWidth(), Heltec.display->getHeight());
-		Heltec.display->setFont(ArialMT_Plain_10);
-		Heltec.display->drawString(Heltec.display->getWidth() / 2, 5, "Conectando a rede");
-		Heltec.display->setFont(ArialMT_Plain_16);
-		Heltec.display->drawString(Heltec.display->getWidth() / 2, 15, SSID);
+
 		int WiFi_Timeout = WIFI_TIMEOUT;
 		int Progresso = 0;
 		while(!WiFi.isConnected() && WiFi_Timeout > 0){
 			WiFi_Timeout--;
-			Heltec.display->drawProgressBar(10, 40, Heltec.display->getWidth() - 20, 5, Progresso);
-			Heltec.display->display();
+
 			WriteNextion("j0.val=" + String((int)Progresso / 2));
 			if(Progresso < 70) Progresso += 2;
 			delay(100);
 		}
 		bool WiFiStatus = WiFi.status() == WL_CONNECTED;
-		Heltec.display->drawProgressBar(10, 40, Heltec.display->getWidth() - 20, 5, 100);
-		Heltec.display->setFont(ArialMT_Plain_10);
-		Heltec.display->drawString(Heltec.display->getWidth() / 2, 50, (WiFiStatus) ? "SUCESSO" : "FALHA");
-		Heltec.display->display();
-		WriteNextion("t.txt=\"" + String((WiFiStatus) ? "Aguardando " + WiFi.localIP().toString() : "Falha ao conectar") + "\"");		 
+		WriteNextion("t.txt=\"" + String((WiFiStatus) ? "Aguardando " + WiFi.localIP().toString() : "Falha ao conectar") + "\"");
 		WriteNextion("j0.val=50");
 		if(WiFiStatus){
 			setEEPROM_SSID(SSID);
@@ -162,9 +139,9 @@ void ConectarWIFI(String SSID, String PASS){
 			WriteNextion("page Splash");
 		}
 	}
-	Status();
 	Serial.flush();
 }
+
 void DesconectarWIFI(){
 	ClienteChanged = false;
 	if(Cliente.connected()){
@@ -177,7 +154,6 @@ void DesconectarWIFI(){
 		WiFi.disconnect();
 	}
 	while(WiFi.isConnected());
-	Status();
 	Serial.flush();
 }
 

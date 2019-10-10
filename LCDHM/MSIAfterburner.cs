@@ -6,8 +6,11 @@ namespace LCDHM {
     class MSIAfterburner {
         public ControlMemory CM;
         public HardwareMonitor HM;
+        private uint TimeoutInstanciaSegundos = 10, TimeoutConectarSegundos = 10;
+
 
         public MSIAfterburner() {
+            uint timeout = TimeoutInstanciaSegundos * 2;
             while (true) {
                 try {
                     HM = new HardwareMonitor();
@@ -15,18 +18,23 @@ namespace LCDHM {
                     break;
                 } catch (Exception) {
                     Thread.Sleep(500);
+                    if (timeout > 0) timeout--; else break;
                 }
             }
         }
 
         public void Conectar() {
-            while (true) {
-                try {
-                    HM.Connect();
-                    CM.Connect();
-                    break;
-                } catch (Exception) {
-                    Thread.Sleep(500);
+            if (HM != null && CM != null) {
+                uint timeout = TimeoutConectarSegundos * 2;
+                while (true) {
+                    try {
+                        HM.Connect();
+                        CM.Connect();
+                        break;
+                    } catch (Exception) {
+                        Thread.Sleep(500);
+                        if (timeout > 0) timeout--; else break;
+                    }
                 }
             }
         }

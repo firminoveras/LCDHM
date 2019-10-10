@@ -9,6 +9,7 @@ using System.Drawing;
 
 namespace LCDHM {
     class TCPESP32 : TcpClient {
+       
 
         public void TCP_WriteLine(String MensagemTCP) {
             try {
@@ -31,6 +32,8 @@ namespace LCDHM {
             }  catch (Exception) { };
             return LinhaLida;
         }
+
+       
 
         public void TCP_Enviar(String Comando) => TCP_WriteLine(Comando);
         public void TCP_Enviar(String Variavel, String Texto) => TCP_WriteLine(Variavel + ".txt=\"" + Texto + "\"");
