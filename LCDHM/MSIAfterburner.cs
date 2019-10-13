@@ -3,11 +3,11 @@ using System;
 using System.Threading;
 
 namespace LCDHM {
-    class MSIAfterburner {
-        public ControlMemory CM;
-        public HardwareMonitor HM;
-        private uint TimeoutInstanciaSegundos = 10, TimeoutConectarSegundos = 10;
 
+    internal class MSIAfterburner {
+        private ControlMemory CM;
+        private HardwareMonitor HM;
+        private readonly uint TimeoutInstanciaSegundos = 10, TimeoutConectarSegundos = 10;
 
         public MSIAfterburner() {
             uint timeout = TimeoutInstanciaSegundos * 2;
@@ -37,6 +37,33 @@ namespace LCDHM {
                     }
                 }
             }
+        }
+
+        public void OverclockAplicar() => CM.CommitChanges();
+
+        public ControlMemoryGpuEntry getGPUEntidade(int GPUIndex) => CM.GpuEntries[GPUIndex];
+
+        public void ReloadControlMemory() {
+            try {
+                CM.ReloadAll();
+            } catch (Exception) {
+            }
+        }
+
+        public bool IsCMConnected() => CM != null;
+
+        public bool IsHMConnected() => HM != null;
+
+        public void DisconnectCM() {
+            if (IsCMConnected()) CM.Disconnect();
+        }
+
+        public void DisconnectHM() {
+            if (IsHMConnected()) HM.Disconnect();
+        }
+
+        public void DisconnectAll() {
+            DisconnectCM(); DisconnectHM();
         }
 
         public HardwareMonitorEntry GetMSIEntidade(String nome) {
