@@ -11,8 +11,10 @@ using System.Windows.Forms;
 namespace LCDHM {
 
     public partial class FormPrincipal : Form {
-
-        private int
+        private float
+                CPU_CLOCK = 0;
+        private uint
+                GPU_VRAM = 0,
                 PAGINA = 0,
                 ANALISE_LINHA = 0,
                 ANALISE_MIN_FPS = 60,
@@ -22,7 +24,9 @@ namespace LCDHM {
                 CPU_THREADS = 0,
                 RAM_TOTAL = 0,
                 HDD_INDEX = 1,
-                NET_INDEX = 1,
+                NET_INDEX = 1;
+
+        private int
                 CORE_BOOST = 0,
                 MEM_BOOST = 0,
                 FAN_BOOST = 30;
@@ -73,7 +77,7 @@ namespace LCDHM {
                     if (entrada.Contains("p7")) { ANALISE_LINHA = 0; MudarPagina(7); }
                     if (entrada.Contains("analise_gravar") && ANALISE_LINHA < 7) ANALISE_LINHA++;
                     if (entrada.Contains("analise_limpar")) ANALISE_LINHA = 0;
-                    if (entrada.Contains("analise_auto")) ANALISE_MIN_FPS = Convert.ToInt32(entrada.Replace("analise_auto", ""));
+                    if (entrada.Contains("analise_auto")) ANALISE_MIN_FPS = Convert.ToUInt32(entrada.Replace("analise_auto", ""));
                     if (entrada.Contains("fps_reset")) { FPS_MAX = 0; FPS_MIN = 0; Cliente.TCP_Enviar("GPU.t6", "-"); Cliente.TCP_Enviar("GPU.t7", "-"); }
                     if (entrada.Contains("core_min") && CORE_BOOST > -200) { CORE_BOOST -= CLOCK_SENSIBILIDADE; MSI_AtualizarClock(); Cliente.TCP_Enviar("Overclock.tcore", Color.Red); }
                     if (entrada.Contains("core_max") && CORE_BOOST < 200) { CORE_BOOST += CLOCK_SENSIBILIDADE; MSI_AtualizarClock(); Cliente.TCP_Enviar("Overclock.tcore", Color.Red); }
@@ -85,10 +89,10 @@ namespace LCDHM {
                     if (entrada.Contains("fan_max") && FAN_BOOST < 100 - FAN_SENSIBILIDADE) { FAN_BOOST += FAN_SENSIBILIDADE; FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None; MSI_AtualizarClock(); Cliente.TCP_Enviar("Overclock.tfan", Color.Red); }
                     if (entrada.Contains("fan_auto")) { FAN_FLAG = MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO; FAN_BOOST = 30; MSI_AtualizarClock(); Cliente.TCP_Enviar("Overclock.tfan", Color.Red); }
                     if (entrada.Contains("oc_aplicar")) {
-                        MSI.getGPUEntidade(0).CoreClockBoostCur = CORE_BOOST * 1000;
-                        MSI.getGPUEntidade(0).MemoryClockBoostCur = MEM_BOOST * 1000;
-                        MSI.getGPUEntidade(0).FanFlagsCur = FAN_FLAG;
-                        if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None) MSI.getGPUEntidade(0).FanSpeedCur = uint.Parse(FAN_BOOST.ToString());
+                        MSI.GetGPUEntidade(0).CoreClockBoostCur = CORE_BOOST * 1000;
+                        MSI.GetGPUEntidade(0).MemoryClockBoostCur = MEM_BOOST * 1000;
+                        MSI.GetGPUEntidade(0).FanFlagsCur = FAN_FLAG;
+                        if (FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.None) MSI.GetGPUEntidade(0).FanSpeedCur = uint.Parse(FAN_BOOST.ToString());
                         Cliente.TCP_Enviar("Overclock.tcore", Color.FromArgb(255, 0, 184, 192));
                         Cliente.TCP_Enviar("Overclock.tmem", Color.FromArgb(255, 0, 184, 192));
                         Cliente.TCP_Enviar("Overclock.tfan", Color.FromArgb(255, 0, 184, 192));
@@ -119,19 +123,19 @@ namespace LCDHM {
             }
         }
 
-        private void MudarPagina(int PG_Index) {
+        private void MudarPagina(uint PG_Index) {
             PAGINA = PG_Index;
             TCP_EnviarAutomatico();
         }
 
         private void TCP_EnviarAutomatico() {
-            int fps;
+            uint fps;
             switch (PAGINA) {
                 default:
                     break;
 
                 case 1:
-                    fps = int.Parse(MSI.GetMSIEntidade("Framerate").Data.ToString("N0"));
+                    fps = uint.Parse(MSI.GetMSIEntidade("Framerate").Data.ToString("N0"));
                     if (fps == 0) {
                         Cliente.TCP_Enviar("GPU.t5", "-");
                         Cliente.TCP_Enviar("GPU.t6", "-");
@@ -155,8 +159,8 @@ namespace LCDHM {
                     break;
 
                 case 2:
-                    fps = int.Parse(MSI.GetMSIEntidade("Framerate").Data.ToString("N0"));
-                    Cliente.TCP_Enviar("gGPU", 0, fps, 0, 100, 0, 100);
+                    fps = uint.Parse(MSI.GetMSIEntidade("Framerate").Data.ToString("N0"));
+                    Cliente.TCP_Enviar("gGPU", 0, (int)fps, 0, 100, 0, 100);
                     Cliente.TCP_Enviar("gGPU", 1, int.Parse(MSI.GetMSIEntidade("GPU temperature").Data.ToString("N0")), 0, 100, 0, 100);
                     Cliente.TCP_Enviar("Overclock.t11", MSI.GetMSIEntidade("GPU temperature").Data.ToString() + " C");
                     Cliente.TCP_Enviar("Overclock.t10", fps.ToString() + " FPS");
@@ -168,6 +172,7 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("CPU.t13", MSI.GetMSIEntidade("CPU fan speed").Data.ToString());
                     Cliente.TCP_Enviar("CPU.t14", MSI.GetMSIEntidade("CPU temperature").Data.ToString());
                     Cliente.TCP_Enviar("CPU.t0", MSI.GetMSIEntidade("CPU clock").Data.ToString("N0"));
+                    Console.WriteLine(MSI.GetMSIEntidade("CPU clock").Data);
                     Cliente.TCP_Enviar("CPU.t15", CPU_CORES.ToString());
                     Cliente.TCP_Enviar("CPU.t16", CPU_THREADS.ToString());
                     String cpus = "|";
@@ -215,19 +220,19 @@ namespace LCDHM {
                     Cliente.TCP_Enviar("s0", 2, int.Parse(MSI.GetMSIEntidade("framerate").Data.ToString("N0")), 0, 71, 0, 71);
                     Cliente.TCP_Enviar("GRAFICO.t33", MSI.GetMSIEntidade("Memory usage").Data.ToString("N0") + " MB");
                     Cliente.TCP_Enviar("GRAFICO.t34", MSI.GetMSIEntidade("GPU temperature").Data.ToString() + " C");
-                    //TODO: Obter MB da GPU
-                    Cliente.TCP_Enviar("s1", 0, int.Parse(((MSI.GetMSIEntidade("Memory usage").Data / 4096) * 100).ToString("N0")), 0, 100, 0, 51);
+                    Cliente.TCP_Enviar("s1", 0, int.Parse(((MSI.GetMSIEntidade("Memory usage").Data / GPU_VRAM) * 100).ToString("N0")), 0, 100, 0, 51);
                     Cliente.TCP_Enviar("GRAFICO.t35", MSI.GetMSIEntidade("CPU clock").Data.ToString("N0") + " MHz");
                     Cliente.TCP_Enviar("GRAFICO.t36", MSI.GetMSIEntidade("CPU temperature").Data.ToString() + " C");
-                    //TODO: Obter Clock da CPU
-                    Cliente.TCP_Enviar("s2", 0, int.Parse(((MSI.GetMSIEntidade("CPU clock").Data / 3900) * 100).ToString("N0")), 0, 100, 0, 51);
+                    float CPU_CLOCK_MSI = MSI.GetMSIEntidade("CPU clock").Data;
+                    if (CPU_CLOCK_MSI > CPU_CLOCK) CPU_CLOCK = CPU_CLOCK_MSI;
+                    Cliente.TCP_Enviar("s2", 0, int.Parse(((CPU_CLOCK_MSI / CPU_CLOCK) * 100).ToString("N0")), 0, 100, 0, 51);
                     Cliente.TCP_Enviar("GRAFICO.t37", RAM_Uso2.ToString("N0") + " MB");
                     Cliente.TCP_Enviar("GRAFICO.t38", (RAM_TOTAL - RAM_Uso2).ToString("N0") + " MB");
                     Cliente.TCP_Enviar("s3", 0, int.Parse(RAM_Porcentagem2.ToString("N0")), 0, 100, 0, 51);
                     break;
 
                 case 7:
-                    fps = Convert.ToInt32(MSI.GetMSIEntidade("Framerate").Data);
+                    fps = Convert.ToUInt32(MSI.GetMSIEntidade("Framerate").Data);
                     Cliente.TCP_Enviar("ANALISE.t" + ANALISE_LINHA + "0", fps.ToString("N0"));
                     Cliente.TCP_Enviar("t" + ANALISE_LINHA + "0", fps < ANALISE_MIN_FPS && fps != 0 ? Color.Red : Color.FromArgb(255, 0, 184, 192));
                     Cliente.TCP_Enviar("ANALISE.t" + ANALISE_LINHA + "1", MSI.GetMSIEntidade("GPU usage").Data.ToString("N0"));
@@ -306,17 +311,24 @@ namespace LCDHM {
 
             Cliente.TCP_Enviar("j0", 75);
             Cliente.TCP_Enviar("t", "Definindo Constantes");
-            CPU_THREADS = Environment.ProcessorCount;
+            CPU_THREADS = (uint)Environment.ProcessorCount;
             CPU_CORES = 0;
             System.Management.ManagementObjectSearcher managementObjectSearcher = new System.Management.ManagementObjectSearcher("Select * from Win32_Processor");
-            foreach (System.Management.ManagementBaseObject item in managementObjectSearcher.Get()) this.CPU_CORES += int.Parse(item["NumberOfCores"].ToString());
+            foreach (System.Management.ManagementBaseObject item in managementObjectSearcher.Get()) this.CPU_CORES += uint.Parse(item["NumberOfCores"].ToString());
             managementObjectSearcher.Dispose();
+            managementObjectSearcher = new System.Management.ManagementObjectSearcher("select MaxClockSpeed from Win32_Processor");
+            foreach (var item in managementObjectSearcher.Get()) CPU_CLOCK = (uint)item["MaxClockSpeed"];
+            managementObjectSearcher.Dispose();
+            managementObjectSearcher = new System.Management.ManagementObjectSearcher("select * from Win32_VideoController");
+            foreach (System.Management.ManagementObject item in managementObjectSearcher.Get()) GPU_VRAM = uint.Parse(item["AdapterRAM"].ToString()) / 1024 / 1024;
+            managementObjectSearcher.Dispose();
+
             Cliente.TCP_Enviar("j0", 80);
-            RAM_TOTAL = Convert.ToInt32(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
+            RAM_TOTAL = Convert.ToUInt32(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
 
             Cliente.TCP_Enviar("j0", 90);
             Cliente.TCP_Enviar("t", "Definindo Clocks");
-            FAN_BOOST = int.Parse(MSI.getGPUEntidade(0).FanSpeedCur.ToString("N0"));
+            FAN_BOOST = int.Parse(MSI.GetGPUEntidade(0).FanSpeedCur.ToString("N0"));
 
             Cliente.TCP_Enviar("j0", 100);
             Cliente.TCP_Enviar("t", "Conectado");
@@ -328,8 +340,8 @@ namespace LCDHM {
 
         private void MSI_AtualizarClock() {
             MSI.ReloadControlMemory();
-            Cliente.TCP_Enviar("Overclock.tcore", (MSI.GetMSIEntidade("Core clock").Data + MSI.getGPUEntidade(0).CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (CORE_BOOST >= 0 ? "+" : "") + CORE_BOOST + ")");
-            Cliente.TCP_Enviar("Overclock.tmem", (MSI.GetMSIEntidade("Memory clock").Data + MSI.getGPUEntidade(0).MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (MEM_BOOST >= 0 ? "+" : "") + MEM_BOOST + ")");
+            Cliente.TCP_Enviar("Overclock.tcore", (MSI.GetMSIEntidade("Core clock").Data + MSI.GetGPUEntidade(0).CoreClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (CORE_BOOST >= 0 ? "+" : "") + CORE_BOOST + ")");
+            Cliente.TCP_Enviar("Overclock.tmem", (MSI.GetMSIEntidade("Memory clock").Data + MSI.GetGPUEntidade(0).MemoryClockBoostCur / 1000).ToString("N0").Replace(".", "") + " (" + (MEM_BOOST >= 0 ? "+" : "") + MEM_BOOST + ")");
             Cliente.TCP_Enviar("Overclock.tfan", FAN_FLAG == MACM_SHARED_MEMORY_GPU_ENTRY_FAN_FLAG.AUTO ? "AUTO" : FAN_BOOST.ToString());
         }
 

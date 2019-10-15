@@ -1,13 +1,11 @@
-#include "NextionMessager.h"
-#include "NextionMessager.h"
 #include <Wire.h>
 #include <SPI.h>
-#include <heltec.h>
 #include <WiFiServer.h>
 #include <WiFiClient.h>
 #include <WiFi.h>
 #include <ETH.h>
 #include "EEPROM_ESP32.h"
+#include "NextionMessager.h"
 
 #define WIFI_TIMEOUT 30
 #define SERIAL_TIMEOUT 50
@@ -20,7 +18,7 @@ EEPROM_ESP32 Flash;
 NextionMessager Nextion;
 
 void setup(){
-	Heltec.begin(false, false, true);
+	Serial.begin(115200);
 	Serial.setTimeout(SERIAL_TIMEOUT);
 }
 
@@ -44,6 +42,7 @@ void loop(){
 	}
 	if(Cliente.available() > 0) ReceberTCP();
 	if(WiFi.isConnected() && !Cliente.connected()){
+
 		if(ClienteChanged) DesconectarWIFI();
 		if(Servidor.hasClient()){
 			ClienteChanged = true;
@@ -147,4 +146,5 @@ void DesconectarWIFI(){
 	}
 	while(WiFi.isConnected());
 	Serial.flush();
+	Nextion.WriteNextion("page Splash");
 }

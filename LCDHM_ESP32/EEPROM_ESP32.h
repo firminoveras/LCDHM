@@ -1,5 +1,3 @@
-#include "EEPROM.h"
-
 #ifndef _EEPROM_ESP32_h
 	#define _EEPROM_ESP32_h
 	#if defined(ARDUINO) && ARDUINO >= 100

@@ -41,7 +41,7 @@ namespace LCDHM {
 
         public void OverclockAplicar() => CM.CommitChanges();
 
-        public ControlMemoryGpuEntry getGPUEntidade(int GPUIndex) => CM.GpuEntries[GPUIndex];
+        public ControlMemoryGpuEntry GetGPUEntidade(int GPUIndex) => CM.GpuEntries[GPUIndex];
 
         public void ReloadControlMemory() {
             try {
@@ -63,7 +63,7 @@ namespace LCDHM {
         }
 
         public void DisconnectAll() {
-            DisconnectCM(); DisconnectHM();
+            try { DisconnectCM(); DisconnectHM(); } catch (Exception) { }
         }
 
         public HardwareMonitorEntry GetMSIEntidade(String nome) {
