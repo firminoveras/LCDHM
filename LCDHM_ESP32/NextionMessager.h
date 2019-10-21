@@ -9,6 +9,11 @@
 class NextionMessager{
 public:
 	void WriteNextion(String mensagem);
+	void SetPagina(String nomePagina);
+	void SetTexto(String id, String texto);
+	void SetValor(String id, int valor);
+	void SetImagem(String id, int idImagem);
+	void Reset();
 };
 #endif
 

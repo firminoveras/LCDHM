@@ -1,0 +1,4 @@
+# LCDHM_ESP32 build property overrides
+#
+
+network.port=3232

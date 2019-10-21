@@ -292,7 +292,10 @@ namespace LCDHM {
         }
 
         private void MSI_Conectar() {
-            Cliente.TCP_Enviar("j0", 55);
+            Cliente.TCP_Enviar("CONNECT.titulo", "Conectando ao MSI");
+            Cliente.TCP_Enviar("page CONNECT");
+            Thread.Sleep(300);
+            Cliente.TCP_Enviar("j0", 10);
             Cliente.TCP_Enviar("t", "Inicializando MSI");
             while (Process.GetProcessesByName("MSIAfterburner").Length == 0) {
                 try {
@@ -301,29 +304,31 @@ namespace LCDHM {
                     Mostrar_Configuracoes();
                 }
             }
-            Cliente.TCP_Enviar("j0", 58);
+            Cliente.TCP_Enviar("j0", 20);
             Cliente.TCP_Enviar("t", "Criando Conectividade");
             MSI = new MSIAfterburner();
 
-            Cliente.TCP_Enviar("j0", 64);
+            Cliente.TCP_Enviar("j0", 30);
             Cliente.TCP_Enviar("t", "Conectando ao MSI");
             MSI.Conectar();
 
-            Cliente.TCP_Enviar("j0", 75);
+            Cliente.TCP_Enviar("j0", 45);
             Cliente.TCP_Enviar("t", "Definindo Constantes");
             CPU_THREADS = (uint)Environment.ProcessorCount;
             CPU_CORES = 0;
             System.Management.ManagementObjectSearcher managementObjectSearcher = new System.Management.ManagementObjectSearcher("Select * from Win32_Processor");
             foreach (System.Management.ManagementBaseObject item in managementObjectSearcher.Get()) this.CPU_CORES += uint.Parse(item["NumberOfCores"].ToString());
             managementObjectSearcher.Dispose();
+            Cliente.TCP_Enviar("j0", 50);
             managementObjectSearcher = new System.Management.ManagementObjectSearcher("select MaxClockSpeed from Win32_Processor");
             foreach (var item in managementObjectSearcher.Get()) CPU_CLOCK = (uint)item["MaxClockSpeed"];
             managementObjectSearcher.Dispose();
+            Cliente.TCP_Enviar("j0", 55);
             managementObjectSearcher = new System.Management.ManagementObjectSearcher("select * from Win32_VideoController");
             foreach (System.Management.ManagementObject item in managementObjectSearcher.Get()) GPU_VRAM = uint.Parse(item["AdapterRAM"].ToString()) / 1024 / 1024;
             managementObjectSearcher.Dispose();
 
-            Cliente.TCP_Enviar("j0", 80);
+            Cliente.TCP_Enviar("j0", 65);
             RAM_TOTAL = Convert.ToUInt32(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
 
             Cliente.TCP_Enviar("j0", 90);

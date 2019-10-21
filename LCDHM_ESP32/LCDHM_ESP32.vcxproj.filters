@@ -9,6 +9,27 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{c10fb274-431e-46bd-8e61-014648f44022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly">
+      <UniqueIdentifier>{dcdd32b9-0956-4b4f-9729-26bd91339e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core">
+      <UniqueIdentifier>{97ef449b-a46f-4693-89f9-94b28ab8e520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\apps">
+      <UniqueIdentifier>{ebbea55d-577a-4372-ac51-98bc441702c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\apps\sntp">
+      <UniqueIdentifier>{e194450a-25aa-4c07-8491-1638f3ab894f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libb64">
+      <UniqueIdentifier>{0905598f-8a20-4547-a5f0-16ad1ee1d426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries">
+      <UniqueIdentifier>{65f79e17-6393-45cc-936c-d470718c77b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="LCDHM_ESP32.ino" />
@@ -23,6 +44,141 @@
     <ClInclude Include="NextionMessager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Arduino.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\base64.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\binary.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\cbuf.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Client.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\core_version.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Esp.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-adc.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-bt.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-cpu.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-dac.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-gpio.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-i2c.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-ledc.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-log.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-matrix.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-psram.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-rmt.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-sigmadelta.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-spi.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-timer.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-touch.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-uart.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp8266-compat.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\FunctionalInterrupt.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\HardwareSerial.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\IPAddress.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\IPv6Address.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\MD5Builder.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\pgmspace.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Print.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Printable.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Server.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\stdlib_noniso.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Stream.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\StreamString.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Udp.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\WCharacter.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\wiring_private.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\WString.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\apps\sntp\sntp.h">
+      <Filter>src\_micro-api-readonly\core\apps\sntp</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\libb64\cdecode.h">
+      <Filter>src\_micro-api-readonly\core\libb64</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\libb64\cencode.h">
+      <Filter>src\_micro-api-readonly\core\libb64</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\variants\wifi_lora_32_V2\pins_arduino.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EEPROM_ESP32.cpp">
@@ -31,5 +187,110 @@
     <ClCompile Include="NextionMessager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\base64.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\cbuf.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Esp.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-adc.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-bt.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-cpu.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-dac.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-gpio.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-i2c.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-ledc.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-matrix.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-misc.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-psram.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-rmt.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-sigmadelta.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-spi.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-time.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-timer.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-touch.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\esp32-hal-uart.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\FunctionalInterrupt.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\HardwareSerial.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\IPAddress.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\IPv6Address.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\main.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\MD5Builder.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Print.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\stdlib_noniso.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\Stream.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\StreamString.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\wiring_pulse.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\wiring_shift.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\WMath.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\WString.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="board.txt" />
   </ItemGroup>
 </Project>
