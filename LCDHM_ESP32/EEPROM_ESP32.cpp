@@ -1,6 +1,8 @@
 #include "EEPROM_ESP32.h"
 #include "EEPROM.h"
 
+EEPROM_ESP32 Flash;
+
 void EEPROM_ESP32::clear_EEPROM(){
 	EEPROM.begin(64);
 	for(int i = 0; i < 64; i++) EEPROM.writeChar(i + 1, 255);
@@ -39,6 +41,13 @@ bool EEPROM_ESP32::getEEPROM_AUTOCONNECT(){
 	return AUTOCONNECT;
 }
 
+bool EEPROM_ESP32::hasEEPROM_DATA(){	
+	EEPROM.begin(64);
+	bool hasData = EEPROM.read(1) != 255;
+	EEPROM.end();
+	return hasData;
+}
+
 String EEPROM_ESP32::getEEPROM_PASS(){
 	String PASS = "";
 	EEPROM.begin(64);
@@ -54,3 +63,4 @@ String EEPROM_ESP32::getEEPROM_SSID(){
 	EEPROM.end();
 	return SSID;
 }
+

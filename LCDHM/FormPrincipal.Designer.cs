@@ -76,14 +76,13 @@ namespace LCDHM {
             this.MenuContexto.Size = new System.Drawing.Size(142, 120);
             // 
             // menu_Conectar
-            //    
-            this.menu_Conectar.DropDown = this.MenuIPs;
+            // 
             this.menu_Conectar.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.menu_Conectar.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.menu_Conectar.Image = global::LCDHM.Properties.Resources.conectar;
             this.menu_Conectar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.menu_Conectar.Name = "menu_Conectar";
-            this.menu_Conectar.Size = new System.Drawing.Size(141, 22);
+            this.menu_Conectar.Size = new System.Drawing.Size(180, 22);
             this.menu_Conectar.Text = "Conectar";
             this.menu_Conectar.Click += new System.EventHandler(this.Menu_Conectar_Click);
             // 
@@ -122,7 +121,7 @@ namespace LCDHM {
             this.menu_Desconectar.Image = global::LCDHM.Properties.Resources.desconectar;
             this.menu_Desconectar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.menu_Desconectar.Name = "menu_Desconectar";
-            this.menu_Desconectar.Size = new System.Drawing.Size(141, 22);
+            this.menu_Desconectar.Size = new System.Drawing.Size(180, 22);
             this.menu_Desconectar.Text = "Desconectar";
             this.menu_Desconectar.Visible = false;
             this.menu_Desconectar.Click += new System.EventHandler(this.Menu_Desconectar_Click);
@@ -130,7 +129,7 @@ namespace LCDHM {
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // menu_Configurar
             // 
@@ -139,7 +138,7 @@ namespace LCDHM {
             this.menu_Configurar.Image = global::LCDHM.Properties.Resources.configuracoes;
             this.menu_Configurar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.menu_Configurar.Name = "menu_Configurar";
-            this.menu_Configurar.Size = new System.Drawing.Size(141, 22);
+            this.menu_Configurar.Size = new System.Drawing.Size(180, 22);
             this.menu_Configurar.Text = "Configurar";
             this.menu_Configurar.Click += new System.EventHandler(this.Menu_Configurar_Click);
             // 
@@ -150,7 +149,7 @@ namespace LCDHM {
             this.menu_Sobre.Image = global::LCDHM.Properties.Resources.info;
             this.menu_Sobre.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.menu_Sobre.Name = "menu_Sobre";
-            this.menu_Sobre.Size = new System.Drawing.Size(141, 22);
+            this.menu_Sobre.Size = new System.Drawing.Size(180, 22);
             this.menu_Sobre.Text = "Sobre";
             this.menu_Sobre.Click += new System.EventHandler(this.Menu_Sobre_Click);
             // 
@@ -161,7 +160,7 @@ namespace LCDHM {
             this.menu_Sair.Image = global::LCDHM.Properties.Resources.sair;
             this.menu_Sair.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.menu_Sair.Name = "menu_Sair";
-            this.menu_Sair.Size = new System.Drawing.Size(141, 22);
+            this.menu_Sair.Size = new System.Drawing.Size(180, 22);
             this.menu_Sair.Text = "Sair";
             this.menu_Sair.Click += new System.EventHandler(this.Menu_Sair_Click);
             // 
@@ -179,7 +178,7 @@ namespace LCDHM {
             this.Text_MSI_Diretorio.Location = new System.Drawing.Point(161, 12);
             this.Text_MSI_Diretorio.Name = "Text_MSI_Diretorio";
             this.Text_MSI_Diretorio.ReadOnly = true;
-            this.Text_MSI_Diretorio.Size = new System.Drawing.Size(460, 22);
+            this.Text_MSI_Diretorio.Size = new System.Drawing.Size(367, 22);
             this.Text_MSI_Diretorio.TabIndex = 3;
             // 
             // BT_Buscar_MSI
@@ -189,9 +188,9 @@ namespace LCDHM {
             this.BT_Buscar_MSI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_Buscar_MSI.Font = new System.Drawing.Font("Tw Cen MT", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_Buscar_MSI.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.BT_Buscar_MSI.Location = new System.Drawing.Point(627, 12);
+            this.BT_Buscar_MSI.Location = new System.Drawing.Point(534, 12);
             this.BT_Buscar_MSI.Name = "BT_Buscar_MSI";
-            this.BT_Buscar_MSI.Size = new System.Drawing.Size(87, 22);
+            this.BT_Buscar_MSI.Size = new System.Drawing.Size(94, 22);
             this.BT_Buscar_MSI.TabIndex = 4;
             this.BT_Buscar_MSI.Text = "Buscar";
             this.BT_Buscar_MSI.UseVisualStyleBackColor = false;
@@ -208,9 +207,9 @@ namespace LCDHM {
             this.BT_Buscar_Steam.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BT_Buscar_Steam.Font = new System.Drawing.Font("Tw Cen MT", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BT_Buscar_Steam.ForeColor = System.Drawing.SystemColors.ScrollBar;
-            this.BT_Buscar_Steam.Location = new System.Drawing.Point(627, 41);
+            this.BT_Buscar_Steam.Location = new System.Drawing.Point(534, 41);
             this.BT_Buscar_Steam.Name = "BT_Buscar_Steam";
-            this.BT_Buscar_Steam.Size = new System.Drawing.Size(87, 22);
+            this.BT_Buscar_Steam.Size = new System.Drawing.Size(94, 22);
             this.BT_Buscar_Steam.TabIndex = 4;
             this.BT_Buscar_Steam.Text = "Buscar";
             this.BT_Buscar_Steam.UseVisualStyleBackColor = false;
@@ -225,7 +224,7 @@ namespace LCDHM {
             this.Text_Steam_Diretorio.Location = new System.Drawing.Point(161, 40);
             this.Text_Steam_Diretorio.Name = "Text_Steam_Diretorio";
             this.Text_Steam_Diretorio.ReadOnly = true;
-            this.Text_Steam_Diretorio.Size = new System.Drawing.Size(460, 22);
+            this.Text_Steam_Diretorio.Size = new System.Drawing.Size(367, 22);
             this.Text_Steam_Diretorio.TabIndex = 3;
             // 
             // BT_Aplicar
@@ -237,7 +236,7 @@ namespace LCDHM {
             this.BT_Aplicar.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.BT_Aplicar.Location = new System.Drawing.Point(16, 68);
             this.BT_Aplicar.Name = "BT_Aplicar";
-            this.BT_Aplicar.Size = new System.Drawing.Size(698, 26);
+            this.BT_Aplicar.Size = new System.Drawing.Size(612, 26);
             this.BT_Aplicar.TabIndex = 5;
             this.BT_Aplicar.Text = "Aplicar";
             this.BT_Aplicar.UseVisualStyleBackColor = false;
@@ -285,7 +284,7 @@ namespace LCDHM {
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(52)))));
-            this.ClientSize = new System.Drawing.Size(726, 106);
+            this.ClientSize = new System.Drawing.Size(640, 106);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.BT_Buscar_MSI);

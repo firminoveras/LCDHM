@@ -267,12 +267,14 @@ namespace LCDHM {
                     Cliente.SendTimeout = 2000;
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Conectado", ToolTipIcon.Info);
                     IconeNotificacao.Text = "LCDHM - Conectado a " + IP;
+                    this.menu_Conectar.DropDown = null;
                     TCP_Listener.Start();
                     timer.Start();
                 } else {
                     IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Erro ao tentar se conectar a " + IP + ":" + TCP_PORTA, ToolTipIcon.Error);
                     Properties.Settings.Default.Reload();
                     Menu_IP.Text = Properties.Settings.Default.IP_Favorito;
+                    this.menu_Conectar.DropDown = this.MenuIPs;
                 }
             } catch (Exception ex) {
                 IconeNotificacao.ShowBalloonTip(1000, "LCDHM", ex.Message, ToolTipIcon.Error);
@@ -286,17 +288,17 @@ namespace LCDHM {
             TCP_Listener.Stop();
             menu_Conectar.Visible = true;
             menu_Desconectar.Visible = false;
-            MSI.DisconnectAll();
+            if(MSI != null) MSI.DisconnectAll();
             if (Cliente != null && Cliente.Connected) { Cliente.Close(); Cliente.Dispose(); }
             IconeNotificacao.ShowBalloonTip(1000, "LCDHM", "Desconectado", ToolTipIcon.Info);
         }
 
         private void MSI_Conectar() {
-            Cliente.TCP_Enviar("CONNECT.titulo", "Conectando ao MSI");
-            Cliente.TCP_Enviar("page CONNECT");
+            Cliente.TCP_Enviar("j0", 0);
+            Cliente.TCP_Enviar("Splash.status", "Conectado");            
             Thread.Sleep(300);
             Cliente.TCP_Enviar("j0", 10);
-            Cliente.TCP_Enviar("t", "Inicializando MSI");
+            Cliente.TCP_Enviar("Splash.status", "Inicializando MSI");
             while (Process.GetProcessesByName("MSIAfterburner").Length == 0) {
                 try {
                     Process.Start(Properties.Settings.Default.MSI_Directory);
@@ -305,15 +307,15 @@ namespace LCDHM {
                 }
             }
             Cliente.TCP_Enviar("j0", 20);
-            Cliente.TCP_Enviar("t", "Criando Conectividade");
+            Cliente.TCP_Enviar("Splash.status", "Criando Conectividade");
             MSI = new MSIAfterburner();
 
             Cliente.TCP_Enviar("j0", 30);
-            Cliente.TCP_Enviar("t", "Conectando ao MSI");
+            Cliente.TCP_Enviar("Splash.status", "Conectando ao MSI");
             MSI.Conectar();
 
             Cliente.TCP_Enviar("j0", 45);
-            Cliente.TCP_Enviar("t", "Definindo Constantes");
+            Cliente.TCP_Enviar("Splash.status", "Definindo Constantes");
             CPU_THREADS = (uint)Environment.ProcessorCount;
             CPU_CORES = 0;
             System.Management.ManagementObjectSearcher managementObjectSearcher = new System.Management.ManagementObjectSearcher("Select * from Win32_Processor");
@@ -332,11 +334,11 @@ namespace LCDHM {
             RAM_TOTAL = Convert.ToUInt32(new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / (1024 * 1024));
 
             Cliente.TCP_Enviar("j0", 90);
-            Cliente.TCP_Enviar("t", "Definindo Clocks");
+            Cliente.TCP_Enviar("Splash.status", "Definindo Clocks");
             FAN_BOOST = int.Parse(MSI.GetGPUEntidade(0).FanSpeedCur.ToString("N0"));
 
             Cliente.TCP_Enviar("j0", 100);
-            Cliente.TCP_Enviar("t", "Conectado");
+            Cliente.TCP_Enviar("Splash.status", "Concluido");
             Thread.Sleep(600);
             Cliente.TCP_Enviar("page Principal");
         }
@@ -427,6 +429,3 @@ namespace LCDHM {
         }
     }
 }
-
-//TODO: Melhorar Listener TCP
-//TODO: Melhorar Listener de perda de conexão

@@ -15,58 +15,66 @@
 #define SERIAL_TIMEOUT 50
 #define PORTA 1199
 
-bool ClienteConectado = false;
+bool ClienteConectado = false, StatusPendente = true;
 WiFiServer Servidor(PORTA);
 WiFiClient Cliente;
-EEPROM_ESP32 Flash;
-NextionMessager Nextion;
 
 void setup(){
 	Serial.begin(115200);
 	Serial.setTimeout(SERIAL_TIMEOUT);
-	delay(2000);
-	ConectarWIFI(Flash.getEEPROM_SSID(), Flash.getEEPROM_PASS());
-	while(!WiFi.isConnected()){
-		if(Serial.available() > 0){
-			String entrada = Serial.readStringUntil(':');
-			if(entrada.startsWith("conectar")) ConectarWIFI(Serial.readStringUntil(':'), Serial.readStringUntil(':'));
-		}
-	}
 }
 
 void loop(){
-	ArduinoOTA.handle();
 	if(Serial.available() > 0){
 		String entrada = Serial.readStringUntil(':');
-		if(entrada.startsWith("desconectar")) DesconectarWIFI();
-		else if(entrada.startsWith("scan")) ConectarWIFI(Flash.getEEPROM_SSID(), Flash.getEEPROM_PASS());
-		else EnviarTCP(entrada);
-	}
-	if(Cliente.available() > 0) ReceberTCP();
-	if(WiFi.isConnected() && !Cliente.connected()){
-		if(ClienteConectado) DesconectarWIFI();
-		if(Servidor.hasClient()){
-			ClienteConectado = true;
-			Cliente = Servidor.available();
-			while(!Cliente.connected());
-			EnviarTCP("init");
+		if(entrada.startsWith("desconectar")){
+			DesconectarWIFI();
+		} else if(entrada.startsWith("conectar")){
+			if(Flash.hasEEPROM_DATA() && !Serial.available() > 0) ConectarWIFI(Flash.getEEPROM_SSID(), Flash.getEEPROM_PASS());
+			else if(Serial.available() > 0) ConectarWIFI(Serial.readStringUntil(':'), Serial.readStringUntil(':'));
+			else if(!WiFi.isConnected())ScanWIFI();
+		} else if(entrada.startsWith("limparEEPROM")){
+			Flash.clear_EEPROM();
+			Nextion.SetTexto("Splash.SSID", "");
+		} else if(entrada.startsWith("scan")){
+			ScanWIFI();
+		} else{
+			EnviarTCP(entrada);
 		}
+	}
+	if(WiFi.isConnected()){
+		ArduinoOTA.handle();
+		if(Cliente.available() > 0) ReceberTCP();
+		if(!Cliente.connected()){
+			if(ClienteConectado) DesconectarWIFI();
+			if(Servidor.hasClient()){
+				ClienteConectado = true;
+				Cliente = Servidor.available();
+				while(!Cliente.connected());
+				EnviarTCP("init");
+			}
+		}
+	} else if(StatusPendente){
+		StatusPendente = false;
+		Nextion.SetTexto("Splash.SSID", (Flash.hasEEPROM_DATA() ? Flash.getEEPROM_SSID() : ""));
+		Nextion.SetValor("Splash.j0", 0);
+		Nextion.SetTexto("Splash.status", "Desconectado");
 	}
 }
 
-void EnviarTCP(String e){
-	if(Cliente.connected()) Cliente.println(e);
+void EnviarTCP(String Menssagem){
+	if(Cliente.connected()) Cliente.println(Menssagem);
 }
 
 void ReceberTCP(){
-	String Recebido = "";
+	String Buffer = "";
 	while(Cliente.available() > 0){
-		if((Recebido += (char)Cliente.read()).endsWith("\n")){
-			Nextion.WriteNextion(Recebido);
-			Recebido = "";
+		if((Buffer += (char)Cliente.read()).endsWith("\n")){
+			Nextion.WriteNextion(Buffer);
+			Buffer = "";
 		}
 	}
-	if(Recebido.length() > 0) Nextion.WriteNextion(Recebido);
+	if(Buffer.length() > 0) Nextion.WriteNextion(Buffer);
 }
 
 void ScanWIFI(){
@@ -88,46 +96,39 @@ void ScanWIFI(){
 			if(WiFi.RSSI(i) <= -80) Potencia_Sinal = 21;
 			Nextion.SetImagem("s" + String(i), Potencia_Sinal);
 			Nextion.SetTexto("t" + String(i), WiFi.SSID(i));
-			if(WiFi.SSID(i).equals(Flash.getEEPROM_SSID())){
-				Nextion.SetImagem("p" + String(i), 23);
-			} else{
-				Nextion.SetImagem("p" + String(i), (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? 18 : 17));
-			}
+			Nextion.SetImagem("p" + String(i), (WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? 18 : 17));
 		}
 	}
-	Serial.flush();
 }
 
 void ConectarWIFI(String SSID, String PASS){
 	if(!WiFi.isConnected()){
-		Nextion.SetTexto("Splash.t0", "Desconectado");
-		Nextion.SetPagina("CONNECT");
-		Nextion.SetTexto("t", "Conectando a " + SSID);
+		Nextion.SetPagina("Splash");
+		Nextion.SetTexto("Splash.status", "Conectando a " + SSID);
 		if(PASS.length() > 0) WiFi.begin(SSID.c_str(), PASS.c_str()); else WiFi.begin(SSID.c_str());
 		int WiFi_Timeout = WIFI_TIMEOUT;
 		int Progresso = 0;
 		while(!WiFi.isConnected() && WiFi_Timeout > 0){
 			WiFi_Timeout--;
-			Nextion.SetValor("j0", Progresso);
+			Nextion.SetValor("Splash.j0", Progresso);
 			if(Progresso < 90) Progresso += 3;
 			delay(100);
 		}
 		bool WiFiStatus = WiFi.status() == WL_CONNECTED;
-		Nextion.SetTexto("t", String((WiFiStatus) ? "Conectado" : "Falha ao Conectar"));
-		Nextion.SetValor("j0", 100);
+		Nextion.SetTexto("Splash.status", String((WiFiStatus) ? "Conectado" : "Falha ao Conectar"));
+		Nextion.SetValor("Splash.j0", 100);
 		if(WiFiStatus){
 			Flash.setEEPROM_SSID(SSID);
 			Flash.setEEPROM_PASS(PASS);
 			Servidor.begin();
-			Nextion.SetTexto("Splash.t0", "Aguardando em " + WiFi.localIP().toString() + ":" + String(PORTA));
+			Nextion.SetTexto("Splash.status", "Conectado - " + WiFi.localIP().toString());
+			StatusPendente = true;
 			StartOTA();
 		} else{
 			WiFi.disconnect();
+			ScanWIFI();
 		}
-		delay(2000);
-		Nextion.SetPagina("Splash");
 	}
-	Serial.flush();
 }
 
 void DesconectarWIFI(){
@@ -142,20 +143,20 @@ void DesconectarWIFI(){
 		WiFi.disconnect();
 	}
 	while(WiFi.isConnected());
-	Nextion.SetTexto("Splash.t0", "Desconectado");
 	Nextion.SetPagina("Splash");
+	StatusPendente = true;
 }
 
 void StartOTA(){
-	ArduinoOTA.onStart([](){
-		Nextion.SetPagina("CONNECT");
-		Nextion.SetTexto("Titulo", "Atualizacao via OTA");
+	ArduinoOTA.onStart(
+		[](){
+			Nextion.SetPagina("Splash");
 		});
 	ArduinoOTA.onEnd([](){ Nextion.Reset(); });
 	ArduinoOTA.onProgress(
 		[](unsigned int progress, unsigned int total){
-			Nextion.SetValor("j0", (progress / (total / 100)));
-			Nextion.SetTexto("t", "Progresso: " + String((progress / (total / 100))) + "%");
+			Nextion.SetValor("Splash.j0", (progress / (total / 100)));
+			Nextion.SetTexto("Splash.status", "Atualizacao OTA: " + String((progress / (total / 100))) + "%");
 		});
 
 	ArduinoOTA.onError(
@@ -166,9 +167,7 @@ void StartOTA(){
 			else if(error == OTA_CONNECT_ERROR) erro = "Erro de Conexao";
 			else if(error == OTA_RECEIVE_ERROR) erro = "Erro de Recebimento";
 			else if(error == OTA_END_ERROR) erro = "Erro na Finalizacao";
-			Nextion.SetTexto("t", "ERRO: " + erro);
-			
+			Nextion.SetTexto("Splash.status", "ERRO: " + erro);
 		});
 	ArduinoOTA.begin();
-	delay(500);
 }

@@ -1,5 +1,7 @@
 #include "NextionMessager.h"
 
+NextionMessager Nextion;
+
 void NextionMessager::WriteNextion(String Mensagem){
 	if(Serial){
 		Serial.print((Mensagem.endsWith("\n") ? Mensagem.substring(0, Mensagem.length() - 1) : Mensagem));

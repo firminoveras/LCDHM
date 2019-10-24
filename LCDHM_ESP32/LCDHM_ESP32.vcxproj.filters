@@ -38,9 +38,6 @@
     <ClInclude Include="__vm\.LCDHM_ESP32.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EEPROM_ESP32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NextionMessager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -179,11 +176,11 @@
     <ClInclude Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\variants\wifi_lora_32_V2\pins_arduino.h">
       <Filter>src\_micro-api-readonly\core</Filter>
     </ClInclude>
+    <ClInclude Include="EEPROM_ESP32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EEPROM_ESP32.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NextionMessager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -288,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="C:\Users\firmi\AppData\Local\arduino15\packages\Heltec-esp32\hardware\esp32\0.0.2-rc1\cores\esp32\WString.cpp">
       <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="EEPROM_ESP32.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
